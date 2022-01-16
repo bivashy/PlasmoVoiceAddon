@@ -74,7 +74,8 @@ PlasmoVoiceAddon is a music player (Supports mp3 and wav) from url or local file
 
 **How to play ISound?**
    After you have converter your file or url to ISound you will need to play sound:
-      ```
+
+      
         PlasmoVoiceAddon addon = PlasmoVoiceAddon.getPlugin(PlasmoVoiceAddon.class);
         ISound sound = //Our iSound
         
@@ -86,7 +87,8 @@ PlasmoVoiceAddon is a music player (Supports mp3 and wav) from url or local file
         int playDistance = 100;
         //Play your sound with specific distance
         playerAudioSource.sendAudioData(sound, playDistance);
-      ```
+	
+      
     
           
 
