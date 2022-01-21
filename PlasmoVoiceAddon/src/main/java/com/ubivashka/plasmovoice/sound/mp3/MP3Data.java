@@ -1,16 +1,15 @@
 package com.ubivashka.plasmovoice.sound.mp3;
 
-import javazoom.jl.decoder.Header;
-
 public class MP3Data {
 	private final byte[] pcmData;
-	private final int sampleRate;
-	private final int channels;
+	private final int sampleRate, channels, frameSize, bitrate;
 
-	public MP3Data(byte[] pcmData, Header header) {
+	public MP3Data(byte[] pcmData, MP3Decoder decoder) {
 		this.pcmData = pcmData;
-		this.sampleRate = header.frequency();
-		this.channels = (header.mode()==Header.SINGLE_CHANNEL) ? 1 : 2;
+		this.sampleRate = decoder.getSampleRate();
+		this.frameSize = decoder.getFrameSize();
+		this.channels = decoder.getChannels();
+		this.bitrate = decoder.getBitrate();
 	}
 
 	public byte[] getPcmData() {
@@ -23,6 +22,14 @@ public class MP3Data {
 
 	public int getChannels() {
 		return channels;
+	}
+
+	public int getFrameSize() {
+		return frameSize;
+	}
+
+	public int getBitrate() {
+		return bitrate;
 	}
 
 }

@@ -6,8 +6,6 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 import org.bukkit.Bukkit;
@@ -19,9 +17,7 @@ import org.bukkit.entity.Player;
 import com.ubivashka.plasmovoice.PlasmoVoiceAddon;
 import com.ubivashka.plasmovoice.audio.sources.PlayerAudioSource;
 import com.ubivashka.plasmovoice.sound.ISound;
-import com.ubivashka.plasmovoice.sound.SoundFormat;
-import com.ubivashka.plasmovoice.sound.mp3.MP3Sound;
-import com.ubivashka.plasmovoice.sound.pcm.AudioStreamSound;
+import com.ubivashka.plasmovoice.sound.SoundBuilder;
 
 public class PlayURLSoundExecutor implements CommandExecutor {
 	private static final PlasmoVoiceAddon PLUGIN = PlasmoVoiceAddon.getPlugin(PlasmoVoiceAddon.class);
@@ -33,26 +29,14 @@ public class PlayURLSoundExecutor implements CommandExecutor {
 			return true;
 		}
 		Player player = (Player) sender;
-		if (args.length >= 2) {
+		if (args.length >= 1) {
 			try {
 				URL url = new URL(args[0]);
-				SoundFormat soundFormat = SoundFormat.findMatchingSoundFormat(args[1]);
 				Bukkit.getScheduler().runTaskAsynchronously(PLUGIN, () -> {
 					try {
-						ISound sound = null;
-
-						InputStream is = url.openStream();
-						BufferedInputStream bis = new BufferedInputStream(is);
-						switch (soundFormat) {
-						case WAV:
-							AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(bis);
-							sound = new AudioStreamSound(audioInputStream,
-									PLUGIN.getPlasmoVoiceSoundPlayer().getCodecHolder(), true);
-							break;
-						case MP3:
-							sound = new MP3Sound(bis, PLUGIN.getPlasmoVoiceSoundPlayer());
-							break;
-						}
+						InputStream inputStream = url.openStream();
+						BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+						ISound sound = new SoundBuilder(bufferedInputStream).build();
 
 						if (sound == null) {
 							player.sendMessage("Проблемы при создании музыки");
