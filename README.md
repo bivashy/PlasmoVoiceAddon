@@ -10,6 +10,10 @@
 ![Tested Spigot version](https://img.shields.io/badge/Tested%20on-Spigot%201.16.4-informational)
 [![Spigot Rating](https://img.shields.io/spiget/rating/99253?label=[Spigot]%20Rating)](https://www.spigotmc.org/resources/plasmovoiceaddon.99253/) 
 
+
+![Plugin logo](https://user-images.githubusercontent.com/85439143/150570814-1e3f3e00-7ec7-4972-a888-cfbb32b8ea6f.png)
+
+
 PlasmoVoiceAddon is a music player (Supports mp3 and wav) from url or local file. And provides API for developers for playing music.
 
 > Important! This is plugin depends on plugin PlasmoVoice. And you cannot play music for the player that not downloaded mod PlasmoVoice
