@@ -4,11 +4,11 @@
 [![Jitpack](https://jitpack.io/v/U61vashka/PlasmoVoiceAddon.svg)](https://jitpack.io/#U61vashka/PlasmoVoiceAddon) 
 ![Lines of code](https://img.shields.io/tokei/lines/github/U61vashka/PlasmoVoiceAddon?label=Lines%20of%20code) 
 
-[![Spigot Downloads](https://img.shields.io/spiget/downloads/85325?label=[Spigot]%20Downloads)](https://www.spigotmc.org/resources/plasmovoiceaddon.99253/)
+[![Spigot Downloads](https://img.shields.io/spiget/downloads/99253?label=[Spigot]%20Downloads)](https://www.spigotmc.org/resources/plasmovoiceaddon.99253/)
 [![Github Releases Downloads](https://img.shields.io/github/downloads/U61vashka/PlasmoVoiceAddon/total?label=[Github]%20Releases%20downloads)](https://github.com/U61vashka/PlasmoVoiceAddon/releases)
 
 ![Tested Spigot version](https://img.shields.io/badge/Tested%20on-Spigot%201.16.4-informational)
-[![Spigot Rating](https://img.shields.io/spiget/rating/85325?label=[Spigot]%20Rating)](https://www.spigotmc.org/resources/plasmovoiceaddon.99253/) 
+[![Spigot Rating](https://img.shields.io/spiget/rating/99253?label=[Spigot]%20Rating)](https://www.spigotmc.org/resources/plasmovoiceaddon.99253/) 
 
 PlasmoVoiceAddon is a music player (Supports mp3 and wav) from url or local file. And provides API for developers for playing music.
 
