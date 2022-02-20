@@ -1,5 +1,4 @@
-/bin/
-/target/
 /.classpath
 /.project
-/PlasmoVoiceAddon/.settings
+/bin/
+/target/
