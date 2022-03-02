@@ -30,7 +30,7 @@ PlasmoVoiceAddon is a music player (Supports mp3 and wav) from url or local file
 **Command examples**:
    1. /musicfile piano2.wav - Will be played file piano2.wav file with format wav
    2. /musicfile piano2.mp3 - Will be played file piano2.mp3 file with format mp3
-   3. /musicurl https://tofadev.space/audio/small_mptest.mp3 - Will be played sound from url with format mp3
+   3. /musicurl https://audio.jukehost.co.uk/L3HgZZAWd0GO38Ghw4xxreITjDk1krXL - Will be played sound from url with format mp3
 
 **Developer API**:
   **How to play sound?**
