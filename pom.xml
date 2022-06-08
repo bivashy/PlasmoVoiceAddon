@@ -1,170 +1,190 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>PlasmoVoiceAddon</groupId>
-	<artifactId>PlasmoVoiceAddon</artifactId>
-	<version>1.0.0</version>
-	<properties>
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>PlasmoVoiceAddon</groupId>
+    <artifactId>PlasmoVoiceAddon</artifactId>
+    <version>1.0.0</version>
+    <properties>
+        <!-- Manifest -->
+        <manifest.contact>https://vk.me/bbaty45/</manifest.contact>
+        <manifest.developer>Ubivashka</manifest.developer>
+        <manifest.version>${project.version}</manifest.version>
 
-		<!-- Manifest -->
-		<manifest.contact>https://vk.me/bbaty45/</manifest.contact>
-		<manifest.developer>Ubivashka</manifest.developer>
-		<manifest.version>${project.version}</manifest.version>
+        <!-- Building -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>8</java.version>
+        <project.mainclass>com.ubivashka.plasmovoice.PlasmoVoiceAddon
+        </project.mainclass>
 
-		<!-- Building -->
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<java.version>8</java.version>
-		<project.mainclass>com.ubivashka.plasmovoice.PlasmoVoiceAddon
-		</project.mainclass>
+        <!-- Dependencies -->
+        <spigot.api.version>1.16.4-R0.1-SNAPSHOT</spigot.api.version>
+        <jna.version>4.4.0</jna.version>
+        <plasmovoice.api.version>1.0.9</plasmovoice.api.version>
+        <jlayer.decoder.version>1.0.1.4</jlayer.decoder.version>
+        <lamp.version>3.0.4</lamp.version>
+        <configuration.library.version>2.0.8</configuration.library.version>
 
-		<!-- Dependencies -->
-		<spigot.api.version>1.16.4-R0.1-SNAPSHOT</spigot.api.version>
-		<jna.version>4.4.0</jna.version>
-		<plasmovoice.api.version>1.0.9</plasmovoice.api.version>
-		<java.mp3.version>1.0.4</java.mp3.version>
-		<jlayer.decoder.version>1.0.1.4</jlayer.decoder.version>
+        <!-- Maven plugins -->
+        <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
+        <maven.jar.plugin.version>3.2.0</maven.jar.plugin.version>
+        <maven.source.plugin.version>3.2.0</maven.source.plugin.version>
+    </properties>
 
-		<!-- Maven plugins -->
-		<maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
-		<maven.jar.plugin.version>3.2.0</maven.jar.plugin.version>
-		<maven.source.plugin.version>3.2.0</maven.source.plugin.version>
-	</properties>
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
 
-	<repositories>
-		<repository>
-			<id>jitpack.io</id>
-			<url>https://jitpack.io</url>
-		</repository>
-		<repository>
-			<id>spigot-repo</id>
-			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/
-			</url>
-		</repository>
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/
+            </url>
+        </repository>
 
-		<repository>
-			<id>henkelmax.public</id>
-			<url>https://maven.maxhenkel.de/repository/public</url>
-		</repository>
+        <repository>
+            <id>henkelmax.public</id>
+            <url>https://maven.maxhenkel.de/repository/public</url>
+        </repository>
 
-		<repository>
-			<id>plasmo-repo</id>
-			<url>https://repo.plo.su</url>
-		</repository>
+        <repository>
+            <id>plasmo-repo</id>
+            <url>https://repo.plo.su</url>
+        </repository>
 
+        <repository>
+            <id>addradio-public-mvn-repo</id>
+            <name>AddRadio Public Maven Repository</name>
+            <url>http://mvn-repo.dev.addradio.net/mvn-repo/releases</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
 
+    <dependencies>
+        <!-- Spigot API -->
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>${spigot.api.version}</version>
+            <scope>provided</scope>
+        </dependency>
 
-		<repository>
-			<id>addradio-public-mvn-repo</id>
-			<name>AddRadio Public Maven Repository</name>
-			<url>http://mvn-repo.dev.addradio.net/mvn-repo/releases</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-			</snapshots>
-		</repository>
-	</repositories>
+        <!-- JNA -->
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>${jna.version}</version>
+            <scope>compile</scope>
+        </dependency>
 
-	<dependencies>
-		<!-- Spigot API -->
-		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot-api</artifactId>
-			<version>${spigot.api.version}</version>
-			<scope>provided</scope>
-		</dependency>
+        <!-- Plasmo Voice -->
+        <dependency>
+            <groupId>su.plo.voice</groupId>
+            <artifactId>spigot</artifactId>
+            <version>${plasmovoice.api.version}</version>
+            <scope>provided</scope>
+        </dependency>
 
-		<!-- JNA -->
-		<dependency>
-			<groupId>net.java.dev.jna</groupId>
-			<artifactId>jna</artifactId>
-			<version>${jna.version}</version>
-			<scope>compile</scope>
-		</dependency>
+        <!-- JLayer -->
+        <dependency>
+            <groupId>com.googlecode.soundlibs</groupId>
+            <artifactId>jlayer</artifactId>
+            <version>${jlayer.decoder.version}</version>
+        </dependency>
 
-		<!-- Plasmo Voice -->
-		<dependency>
-			<groupId>su.plo.voice</groupId>
-			<artifactId>spigot</artifactId>
-			<version>${plasmovoice.api.version}</version>
-			<scope>provided</scope>
-		</dependency>
+        <!-- Lamp command framework -->
+        <dependency>
+            <groupId>com.github.Revxrsal.Lamp</groupId>
+            <artifactId>common</artifactId>
+            <version>${lamp.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.Revxrsal.Lamp</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>${lamp.version}</version>
+        </dependency>
 
-		<!-- JLayer -->
-		<dependency>
-			<groupId>com.googlecode.soundlibs</groupId>
-			<artifactId>jlayer</artifactId>
-			<version>${jlayer.decoder.version}</version>
-		</dependency>
-	</dependencies>
+        <!-- Configuration library -->
+        <dependency>
+            <groupId>com.github.U61vashka.ConfigurationLibrary</groupId>
+            <artifactId>core</artifactId>
+            <version>${configuration.library.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.U61vashka.ConfigurationLibrary</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>${configuration.library.version}</version>
+        </dependency>
+    </dependencies>
 
-	<build>
-		<finalName>${project.name}</finalName>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>false</filtering>
-			</resource>
-		</resources>
-		<plugins>
-			<!-- Maven compiler plugin -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${maven.compiler.plugin.version}</version>
-				<configuration>
-					<compilerArgs>
-						<arg>-Xlint:deprecation</arg>
-						<arg>-Xlint:unchecked</arg>
-					</compilerArgs>
-					<source>${java.version}</source>
-					<target>${java.version}</target>
-				</configuration>
-			</plugin>
+    <build>
+        <finalName>${project.name}</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <!-- Maven compiler plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.plugin.version}</version>
+                <configuration>
+                    <compilerArgs>
+                        <arg>-Xlint:deprecation</arg>
+                        <arg>-Xlint:unchecked</arg>
+                    </compilerArgs>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <!-- Maven assembly plugin -->
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>${project.mainclass}</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
 
-			<!-- Maven assembly plugin -->
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<configuration>
-					<archive>
-						<manifest>
-							<mainClass>${project.mainclass}</mainClass>
-						</manifest>
-					</archive>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-
-				</configuration>
-
-				<executions>
-					<execution>
-						<id>make-assembly</id>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<!-- Maven source plugin -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>${maven.source.plugin.version}</version>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Maven source plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven.source.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
