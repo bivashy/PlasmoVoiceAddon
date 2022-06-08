@@ -1,10 +1,9 @@
 package com.ubivashka.plasmovoice.config;
 
-import java.util.HashMap;
-
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 
-import net.md_5.bungee.api.ChatColor;
+import java.util.HashMap;
 
 public class Messages {
 	private HashMap<String, String> messages = new HashMap<>();
@@ -19,6 +18,9 @@ public class Messages {
 			addMessage(key, section.getString(key));
 		}
 	}
+
+    public Messages() {
+    }
 
 	public String getMessage(String key) {
 		return messages.get(key);

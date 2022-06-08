@@ -1,36 +1,38 @@
 package com.ubivashka.plasmovoice.config;
 
+import com.ubivashka.configuration.BukkitConfigurationProcessor;
+import com.ubivashka.configuration.ConfigurationProcessor;
+import com.ubivashka.configuration.annotations.ConfigField;
+import com.ubivashka.plasmovoice.config.factories.ConfigurationHolderResolverFactory;
+import com.ubivashka.plasmovoice.config.settings.MusicPlayerSettings;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.ubivashka.plasmovoice.config.settings.MusicPlayerSettings;
-
 public class PluginConfig {
-	private final Configuration config;
-	private final MusicPlayerSettings musicPlayerSettings;
-	private Messages messages;
+    public static final ConfigurationProcessor CONFIGURATION_PROCESSOR = new BukkitConfigurationProcessor().registerFieldResolverFactory(ConfigurationHolder.class, new ConfigurationHolderResolverFactory());
+    private final Configuration config;
+    @ConfigField("music-player-settings")
+    private MusicPlayerSettings musicPlayerSettings = new MusicPlayerSettings();
+    @ConfigField("messages")
+    private Messages messages = new Messages();
 
-	public PluginConfig(JavaPlugin plugin) {
-		plugin.saveDefaultConfig();
-		this.config = plugin.getConfig();
+    public PluginConfig(JavaPlugin plugin) {
+        plugin.saveDefaultConfig();
+        this.config = plugin.getConfig();
 
-		this.musicPlayerSettings = new MusicPlayerSettings(
-				getConfig().getConfigurationSection("music-player-settings"));
+        CONFIGURATION_PROCESSOR.resolve(config, this);
+    }
 
-		if (config.contains("messages"))
-			this.messages = new Messages(config.getConfigurationSection("messages"));
-	}
+    public Configuration getConfig() {
+        return config;
+    }
 
-	public Configuration getConfig() {
-		return config;
-	}
+    public Messages getMessages() {
+        return messages;
+    }
 
-	public Messages getMessages() {
-		return messages;
-	}
-
-	public MusicPlayerSettings getMusicPlayerSettings() {
-		return musicPlayerSettings;
-	}
+    public MusicPlayerSettings getMusicPlayerSettings() {
+        return musicPlayerSettings;
+    }
 
 }
