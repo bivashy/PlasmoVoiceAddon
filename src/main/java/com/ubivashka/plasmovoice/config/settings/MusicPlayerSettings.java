@@ -10,7 +10,7 @@ public class MusicPlayerSettings implements ConfigurationHolder {
     private int sleepDelay = 15;
 
     public MusicPlayerSettings(ConfigurationSection configurationSection) {
-        PluginConfig.CONFIGURATION_PROCESSOR.resolve(configurationSection,this);
+        PluginConfig.CONFIGURATION_PROCESSOR.resolve(configurationSection, this);
     }
 
     public MusicPlayerSettings() {

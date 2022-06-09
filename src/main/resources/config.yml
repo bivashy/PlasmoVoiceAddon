@@ -1,3 +1,14 @@
 music-player-settings:
   # Данная настройка отвечает за скорость воспроизведения аудио, чем меньше тем быстрее, чем больше тем медленее
+  # That settings controls speed of the audio, less value - faster, more value - slower audio.
   sleep-delay: 15
+messages:
+  not-enough-permission: '&cYou are not allowed to execute this command!'
+  missing-argument: '&cYou must specify a value for {0}'
+  error-occurred: '&cAn error occurred while executing this command'
+  invalid-url: '&cInvalid URL: {0}'
+  invalid-number: '&cExpected number, but found {0}'
+  invalid-file: '&cInvalid file: {0}'
+  file-not-exists: '&cFile not exists: {0}'
+  cannot-create-sound: '&cCannot create sound, probably your input invalid'
+  config-reload: '&aConfiguration successfully reloaded'

@@ -16,22 +16,35 @@ public class ConfigurationHolderResolverFactory implements ConfigurationFieldRes
             throw new UnsupportedOperationException("Collection unsupported for ConfigurationHolder");
         Class<?> fieldClass = factoryContext.valueType();
         try {
-            Constructor<?> constructor = fieldClass.getConstructor(ConfigurationSectionHolder.class);
-            return (context) -> {
-                try {
-                    return (ConfigurationHolder) constructor
-                            .newInstance(context.configuration().getSection(context.path()));
-                } catch(InstantiationException |
-                        IllegalAccessException |
-                        IllegalArgumentException
-                        |
-                        InvocationTargetException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            };
-        } catch(NoSuchMethodException |
-                SecurityException e) {
+            for (Constructor<?> constructor : fieldClass.getDeclaredConstructors()) {
+                if (constructor.getParameterCount() != 1)
+                    continue;
+                if (ConfigurationSectionHolder.class.isAssignableFrom(constructor.getParameterTypes()[0]))
+                    return (context) -> {
+                        try {
+                            return (ConfigurationHolder) constructor.newInstance(context.configuration().getSection(context.path()));
+                        } catch(InstantiationException |
+                                IllegalAccessException |
+                                IllegalArgumentException |
+                                InvocationTargetException e) {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    };
+                if (constructor.getParameterTypes()[0].isAssignableFrom(factoryContext.configuration().getOriginalHolder().getClass()))
+                    return (context) -> {
+                        try {
+                            return constructor.newInstance(context.configuration().getSection(context.path()).getOriginalHolder());
+                        } catch(InstantiationException |
+                                IllegalAccessException |
+                                IllegalArgumentException |
+                                InvocationTargetException e) {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    };
+            }
+        } catch(SecurityException e) {
             e.printStackTrace();
         }
         return null;

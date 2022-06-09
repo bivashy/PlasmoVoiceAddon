@@ -1,14 +1,6 @@
 name: PlasmoVoiceAddon
 main: com.ubivashka.plasmovoice.PlasmoVoiceAddon
-version: 1.0.0
+version: 1.1.0
 description: 'Supported by Vanillium'
 depend: [PlasmoVoice]
 api-version: 1.13
-commands:
-  musicurl:
-    usage: '/musicurl [music url] [mp3 or wav]'
-    description: 'Play music from url'
-  musicfile:
-    usage: '/musicfile [music file] [mp3 or wav]'
-    description: 'Play music from file in data folder'
-  
