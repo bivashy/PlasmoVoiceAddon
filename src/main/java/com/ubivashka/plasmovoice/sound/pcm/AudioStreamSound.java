@@ -1,15 +1,15 @@
 package com.ubivashka.plasmovoice.sound.pcm;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import com.ubivashka.plasmovoice.audio.codecs.ICodecHolder;
+import com.ubivashka.plasmovoice.audio.player.ISoundPlayer;
+import com.ubivashka.plasmovoice.sound.ISound;
+import com.ubivashka.plasmovoice.sound.SoundFormat;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
-
-import com.ubivashka.plasmovoice.audio.codecs.ICodecHolder;
-import com.ubivashka.plasmovoice.audio.recorder.ISoundPlayer;
-import com.ubivashka.plasmovoice.sound.ISound;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AudioStreamSound implements ISound {
 	private List<byte[]> dataList;
@@ -49,6 +49,11 @@ public class AudioStreamSound implements ISound {
 			e.printStackTrace();
 		}
 		this.dataList = newDataList;
+	}
+
+	@Override
+	public SoundFormat getSoundFormat() {
+		return SoundFormat.WAV;
 	}
 
 	@Override

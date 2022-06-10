@@ -1,6 +1,6 @@
 package com.ubivashka.plasmovoice;
 
-import com.ubivashka.plasmovoice.audio.recorder.PlasmoVoiceSoundPlayer;
+import com.ubivashka.plasmovoice.audio.player.PlasmoVoiceSoundPlayer;
 import com.ubivashka.plasmovoice.commands.CommandRegistry;
 import com.ubivashka.plasmovoice.config.PluginConfig;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -17,6 +17,7 @@ public class PlasmoVoiceAddon extends JavaPlugin {
 	}
 
 	public void reload(){
+		reloadConfig();
 		pluginConfig = new PluginConfig(this);
 	}
 

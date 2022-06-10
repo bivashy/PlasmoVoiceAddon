@@ -1,6 +1,6 @@
 package com.ubivashka.plasmovoice.audio.sources;
 
-import com.ubivashka.plasmovoice.audio.recorder.ISoundPlayer;
+import com.ubivashka.plasmovoice.audio.player.ISoundPlayer;
 
 public abstract class AbstractPlayerAudioSource implements IPlayerAudioSource {
 
