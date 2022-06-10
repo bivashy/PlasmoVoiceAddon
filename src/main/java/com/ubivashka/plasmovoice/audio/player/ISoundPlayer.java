@@ -1,6 +1,7 @@
-package com.ubivashka.plasmovoice.audio.recorder;
+package com.ubivashka.plasmovoice.audio.player;
 
 import com.ubivashka.plasmovoice.audio.codecs.ICodecHolder;
+import com.ubivashka.plasmovoice.audio.player.session.ISoundPlaySession;
 import com.ubivashka.plasmovoice.audio.sources.IAudioSource;
 import com.ubivashka.plasmovoice.sound.ISound;
 

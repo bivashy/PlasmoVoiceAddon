@@ -1,14 +1,14 @@
-package com.ubivashka.plasmovoice.audio.recorder;
-
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+package com.ubivashka.plasmovoice.audio.player;
 
 import com.ubivashka.plasmovoice.audio.codecs.ICodecHolder;
 import com.ubivashka.plasmovoice.audio.codecs.OpusCodecHolder;
+import com.ubivashka.plasmovoice.audio.player.session.ISoundPlaySession;
+import com.ubivashka.plasmovoice.audio.player.session.PlasmoVoiceSoundPlaySession;
 import com.ubivashka.plasmovoice.audio.sources.IAudioSource;
 import com.ubivashka.plasmovoice.audio.sources.IPlayerAudioSource;
 import com.ubivashka.plasmovoice.sound.ISound;
-
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import su.plo.voice.PlasmoVoice;
 
 public class PlasmoVoiceSoundPlayer implements ISoundPlayer {
