@@ -42,7 +42,7 @@ public class CommandRegistry {
     }
 
     private void registerCommands() {
-        commandHandler.register(new MusicUrlCommand(), new MusicFileCommand(), new MusicReloadCommand());
+        commandHandler.register(new MusicCommand());
     }
 }
 
