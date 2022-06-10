@@ -1,52 +1,47 @@
 package com.ubivashka.plasmovoice.sound;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.UnsupportedAudioFileException;
-
 import com.ubivashka.plasmovoice.PlasmoVoiceAddon;
 import com.ubivashka.plasmovoice.sound.mp3.MP3Sound;
 import com.ubivashka.plasmovoice.sound.pcm.AudioStreamSound;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 public class SoundBuilder {
-	private static final PlasmoVoiceAddon PLUGIN = PlasmoVoiceAddon.getPlugin(PlasmoVoiceAddon.class);
-	
-	private final InputStream inputStream;
-	private SoundFormat soundFormat;
+    private static final PlasmoVoiceAddon PLUGIN = PlasmoVoiceAddon.getPlugin(PlasmoVoiceAddon.class);
 
-	public SoundBuilder(InputStream inputStream) {
-		this.inputStream = inputStream;
-		this.soundFormat = SoundFormat.findMatchingSoundFormat(inputStream);
-	}
+    private final InputStream inputStream;
+    private SoundFormat soundFormat;
 
-	public SoundBuilder withSoundFormat(SoundFormat soundFormat) {
-		this.soundFormat = soundFormat;
-		return this;
-	}
+    public SoundBuilder(InputStream inputStream) {
+        if(!inputStream.markSupported())
+            inputStream = new BufferedInputStream(inputStream);
+        this.inputStream = inputStream;
+        this.soundFormat = SoundFormat.findMatchingSoundFormat(this.inputStream);
+    }
 
-	public ISound build() throws UnsupportedAudioFileException, IOException {
-		ISound sound = null;
-		
-		BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
-		switch (soundFormat) {
-		case WAV:
-			AudioInputStream audioInputStream;
-			
-				audioInputStream = AudioSystem.getAudioInputStream(bufferedInputStream);
-			
-			sound = new AudioStreamSound(audioInputStream, PLUGIN.getPlasmoVoiceSoundPlayer().getCodecHolder(), true);
-			break;
-		case MP3:
-			
-				sound = new MP3Sound(bufferedInputStream, PLUGIN.getPlasmoVoiceSoundPlayer());
-			
-			break;
-		}
-		
-		return sound;
-	}
+    public SoundBuilder withSoundFormat(SoundFormat soundFormat) {
+        this.soundFormat = soundFormat;
+        return this;
+    }
+
+    public ISound build() throws UnsupportedAudioFileException, IOException {
+        ISound sound = null;
+        inputStream.reset();
+        switch (soundFormat) {
+            case WAV:
+                AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(inputStream);
+                sound = new AudioStreamSound(audioInputStream, PLUGIN.getPlasmoVoiceSoundPlayer().getCodecHolder(), true);
+                break;
+            case MP3:
+                sound = new MP3Sound(inputStream, PLUGIN.getPlasmoVoiceSoundPlayer());
+                break;
+        }
+        this.inputStream.close();
+        return sound;
+    }
 }
