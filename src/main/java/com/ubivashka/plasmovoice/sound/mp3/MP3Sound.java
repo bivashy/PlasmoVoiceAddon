@@ -1,7 +1,8 @@
 package com.ubivashka.plasmovoice.sound.mp3;
 
-import com.ubivashka.plasmovoice.audio.recorder.ISoundPlayer;
+import com.ubivashka.plasmovoice.audio.player.ISoundPlayer;
 import com.ubivashka.plasmovoice.sound.ISound;
+import com.ubivashka.plasmovoice.sound.SoundFormat;
 import com.ubivashka.plasmovoice.sound.pcm.AudioStreamSound;
 import javazoom.spi.mpeg.sampled.convert.MpegFormatConversionProvider;
 import javazoom.spi.mpeg.sampled.file.MpegAudioFileReader;
@@ -36,6 +37,11 @@ public class MP3Sound implements ISound {
                 false);
         audioInputStream = new MpegFormatConversionProvider().getAudioInputStream(targetFormat, audioInputStream);
         convertedSound = new AudioStreamSound(audioInputStream, player.getCodecHolder(), true);
+    }
+
+    @Override
+    public SoundFormat getSoundFormat() {
+        return SoundFormat.MP3;
     }
 
     @Override

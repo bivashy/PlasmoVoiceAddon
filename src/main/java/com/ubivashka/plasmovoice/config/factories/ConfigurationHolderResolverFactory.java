@@ -14,6 +14,7 @@ public class ConfigurationHolderResolverFactory implements ConfigurationFieldRes
     public ConfigurationFieldResolver<?> createResolver(ConfigurationFieldContext factoryContext) {
         if (factoryContext.isValueCollection())
             throw new UnsupportedOperationException("Collection unsupported for ConfigurationHolder");
+        ConfigurationSectionHolder sectionHolder = getSectionHolder(factoryContext.configuration(),factoryContext.path());
         Class<?> fieldClass = factoryContext.valueType();
         try {
             for (Constructor<?> constructor : fieldClass.getDeclaredConstructors()) {
@@ -22,7 +23,7 @@ public class ConfigurationHolderResolverFactory implements ConfigurationFieldRes
                 if (ConfigurationSectionHolder.class.isAssignableFrom(constructor.getParameterTypes()[0]))
                     return (context) -> {
                         try {
-                            return (ConfigurationHolder) constructor.newInstance(context.configuration().getSection(context.path()));
+                            return (ConfigurationHolder) constructor.newInstance(sectionHolder);
                         } catch(InstantiationException |
                                 IllegalAccessException |
                                 IllegalArgumentException |
@@ -34,7 +35,7 @@ public class ConfigurationHolderResolverFactory implements ConfigurationFieldRes
                 if (constructor.getParameterTypes()[0].isAssignableFrom(factoryContext.configuration().getOriginalHolder().getClass()))
                     return (context) -> {
                         try {
-                            return constructor.newInstance(context.configuration().getSection(context.path()).getOriginalHolder());
+                            return constructor.newInstance(sectionHolder.getOriginalHolder());
                         } catch(InstantiationException |
                                 IllegalAccessException |
                                 IllegalArgumentException |
@@ -48,5 +49,13 @@ public class ConfigurationHolderResolverFactory implements ConfigurationFieldRes
             e.printStackTrace();
         }
         return null;
+    }
+
+    private ConfigurationSectionHolder getSectionHolder(ConfigurationSectionHolder root,String path){
+        String[] fullPath = path.split("\\.");
+        ConfigurationSectionHolder sectionHolder = root;
+        for(String pathPiece:fullPath)
+            sectionHolder = sectionHolder.getSection(pathPiece);
+        return sectionHolder;
     }
 }

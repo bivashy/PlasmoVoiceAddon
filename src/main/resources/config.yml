@@ -1,7 +1,10 @@
 music-player-settings:
   # Данная настройка отвечает за скорость воспроизведения аудио, чем меньше тем быстрее, чем больше тем медленее
   # That settings controls speed of the audio, less value - faster, more value - slower audio.
-  sleep-delay: 15
+  WAV:
+    sleep-delay: 12
+  MP3:
+    sleep-delay: 20
 messages:
   not-enough-permission: '&cYou are not allowed to execute this command!'
   missing-argument: '&cYou must specify a value for {0}'

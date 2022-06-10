@@ -13,4 +13,9 @@ public class RawSound implements ISound{
 	public List<byte[]> getDataList() {
 		return dataList;
 	}
+
+	@Override
+	public SoundFormat getSoundFormat() {
+		return SoundFormat.WAV;
+	}
 }

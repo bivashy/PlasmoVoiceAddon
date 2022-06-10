@@ -1,6 +1,7 @@
 package com.ubivashka.plasmovoice.commands;
 
 import com.ubivashka.plasmovoice.PlasmoVoiceAddon;
+import com.ubivashka.plasmovoice.audio.player.controller.PlasmoVoiceSoundController;
 import com.ubivashka.plasmovoice.audio.sources.PlayerAudioSource;
 import com.ubivashka.plasmovoice.commands.annotations.PluginsFolder;
 import com.ubivashka.plasmovoice.config.PluginConfig;
@@ -80,7 +81,7 @@ public class MusicCommand {
             }
 
             PlayerAudioSource playerAudioSource = new PlayerAudioSource(actor.getUniqueId(), plugin.getPlasmoVoiceSoundPlayer());
-            playerAudioSource.sendAudioData(sound, distance);
+            playerAudioSource.sendAudioData(sound, new PlasmoVoiceSoundController(sound.getSoundFormat(),distance));
         } catch(UnsupportedAudioFileException |
                 IOException e) {
             actor.reply(config.getMessages().getMessage("error-occurred"));
