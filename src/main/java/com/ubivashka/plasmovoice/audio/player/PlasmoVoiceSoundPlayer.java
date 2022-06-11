@@ -14,13 +14,11 @@ import org.bukkit.entity.Player;
 import su.plo.voice.PlasmoVoice;
 
 public class PlasmoVoiceSoundPlayer implements ISoundPlayer {
-    private final OpusCodecHolder opusCodecHolder = new OpusCodecHolder();
 
     @Override
     public ISoundPlaySession playSound(ISound sound, IAudioSource audioSource, ISoundController soundController) {
         if (!(audioSource instanceof IPlayerAudioSource) || !(soundController instanceof PlasmoVoiceSoundController))
             return null;
-        updateCodecHolder();
         IPlayerAudioSource playerAudioSource = (IPlayerAudioSource) audioSource;
         Player player = Bukkit.getPlayer(playerAudioSource.getPlayerUniqueId());
         if (player == null)
@@ -28,13 +26,11 @@ public class PlasmoVoiceSoundPlayer implements ISoundPlayer {
         return new PlasmoVoiceSoundPlaySession(sound, playerAudioSource, (PlasmoVoiceSoundController) soundController);
     }
 
-    private void updateCodecHolder() {
-        opusCodecHolder.setSampleRate(PlasmoVoice.getInstance().getVoiceConfig().getSampleRate());
-    }
-
     @Override
-    public ICodecHolder getCodecHolder() {
-        return opusCodecHolder;
+    public ICodecHolder createCodecHolder() {
+        ICodecHolder codecHolder = new OpusCodecHolder();
+        codecHolder.setSampleRate(PlasmoVoice.getInstance().getVoiceConfig().getSampleRate());
+        return codecHolder;
     }
 
 }

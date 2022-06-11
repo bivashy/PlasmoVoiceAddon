@@ -24,7 +24,7 @@ public class AudioStreamSound implements ISound {
 	 *                         ICodecHolder
 	 */
 	public AudioStreamSound(AudioInputStream audioInputStream, ISoundPlayer soundPlayer) {
-		this(audioInputStream, soundPlayer.getCodecHolder(), false);
+		this(audioInputStream, soundPlayer.createCodecHolder(), false);
 	}
 
 	/**
@@ -33,7 +33,7 @@ public class AudioStreamSound implements ISound {
 	 *                         получить из файла или InputStream используйте (Можно
 	 *                         и другим способом):
 	 *                         {@link javax.sound.sampled.AudioSystem}
-	 * @param soundPlayer      - Используется для сжатия звука
+	 * @param codecHolder      - Используется для сжатия звука
 	 * @param convert          - Решает конвертировать ли формат звука
 	 */
 	public AudioStreamSound(AudioInputStream audioInputStream, ICodecHolder codecHolder, boolean convert) {
@@ -45,6 +45,7 @@ public class AudioStreamSound implements ISound {
 		try {
 			new AudioInputStreamReader(newAudioInputStream, (data) -> newDataList.add(codecHolder.encode(data)))
 					.read(codecHolder.getFrameSize());
+			codecHolder.closeEncoder();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

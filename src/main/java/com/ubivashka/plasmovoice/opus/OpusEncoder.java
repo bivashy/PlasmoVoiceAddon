@@ -1,14 +1,13 @@
 package com.ubivashka.plasmovoice.opus;
 
+import com.sun.jna.ptr.PointerByReference;
+import com.ubivashka.plasmovoice.opus.utils.AudioUtils;
+import de.maxhenkel.opus4j.Opus;
+
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
-
-import com.sun.jna.ptr.PointerByReference;
-import com.ubivashka.plasmovoice.opus.utils.AudioUtils;
-
-import de.maxhenkel.opus4j.Opus;
 
 public class OpusEncoder {
 	protected PointerByReference opusEncoder;

@@ -18,7 +18,7 @@ public interface ISoundPlayer {
     ISoundPlaySession playSound(ISound sound, IAudioSource audioSource, ISoundController soundController);
 
     /**
-     * @return Возвращает кодек с которым можно сжимать и обратить этот процесс.
+     * @return Создаёт кодек с которым можно сжимать и обратить этот процесс.
      */
-    ICodecHolder getCodecHolder();
+    ICodecHolder createCodecHolder();
 }

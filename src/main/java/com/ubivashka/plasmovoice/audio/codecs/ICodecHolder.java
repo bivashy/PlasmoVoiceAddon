@@ -27,4 +27,12 @@ public interface ICodecHolder {
     byte[] encode(byte[] data);
 
     byte[] decode(byte[] data);
+
+    void resetEncoder();
+
+    void resetDecoder();
+
+    void closeEncoder();
+
+    void closeDecoder();
 }

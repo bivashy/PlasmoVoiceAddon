@@ -1,53 +1,65 @@
 package com.ubivashka.plasmovoice.audio.codecs;
 
-import javax.sound.sampled.AudioFormat;
-
+import com.ubivashka.plasmovoice.function.MemoizingSupplier;
 import com.ubivashka.plasmovoice.opus.OpusDecoder;
 import com.ubivashka.plasmovoice.opus.OpusEncoder;
-
 import de.maxhenkel.opus4j.Opus;
 
+import javax.sound.sampled.AudioFormat;
+import java.util.function.Supplier;
+
 public class OpusCodecHolder extends AbstractCodecHolder {
-	private static final int MTU_SIZE = 1024;
-	private static final int JOPUS_MODE = Opus.OPUS_APPLICATION_VOIP;
+    private static final int MTU_SIZE = 1024;
+    private static final int JOPUS_MODE = Opus.OPUS_APPLICATION_VOIP;
 
-	private OpusEncoder encoder = new OpusEncoder(sampleRate, frameSize, MTU_SIZE, JOPUS_MODE);
-	private OpusDecoder decoder = new OpusDecoder(sampleRate, frameSize, MTU_SIZE);
+    private Supplier<OpusEncoder> lazyEncoder = MemoizingSupplier.memoize(() -> new OpusEncoder(sampleRate, frameSize, MTU_SIZE, JOPUS_MODE));
+    private Supplier<OpusDecoder> lazyDecoder = MemoizingSupplier.memoize(() -> new OpusDecoder(sampleRate, frameSize, MTU_SIZE));
 
-	public OpusEncoder getEncoder() {
-		return encoder;
-	}
+    public OpusEncoder getEncoder() {
+        return lazyEncoder.get();
+    }
 
-	public void setEncoder(OpusEncoder encoder) {
-		this.encoder = encoder;
-	}
+    public OpusDecoder getDecoder() {
+        return lazyDecoder.get();
+    }
 
-	public OpusDecoder getDecoder() {
-		return decoder;
-	}
+    @Override
+    public byte[] encode(byte[] data) {
+        return getEncoder().encode(data);
+    }
 
-	public void setDecoder(OpusDecoder decoder) {
-		this.decoder = decoder;
-	}
+    @Override
+    public byte[] decode(byte[] data) {
+        return getDecoder().decode(data);
+    }
 
-	@Override
-	public byte[] encode(byte[] data) {
-		return encoder.encode(data);
-	}
+    @Override
+    public void resetEncoder() {
+        getEncoder().reset();
+    }
 
-	@Override
-	public byte[] decode(byte[] data) {
-		return decoder.decode(data);
-	}
+    @Override
+    public void closeEncoder() {
+        getEncoder().close();
+    }
 
-	@Override
-	public void setSampleRate(int sampleRate) {
-		this.sampleRate = sampleRate;
-		this.audioFormat = new AudioFormat(sampleRate, 16, 1, true, false);
-		this.frameSize = (sampleRate / 1000) * 2 * 20;
+    public void resetDecoder() {
+        getDecoder().reset();
+    }
 
-		this.encoder = new OpusEncoder(sampleRate, frameSize, MTU_SIZE, JOPUS_MODE);
-		this.decoder = new OpusDecoder(sampleRate, frameSize, MTU_SIZE);
-	}
+    @Override
+    public void closeDecoder() {
+		getDecoder().close();
+    }
+
+    @Override
+    public void setSampleRate(int sampleRate) {
+        this.sampleRate = sampleRate;
+        this.audioFormat = new AudioFormat(sampleRate, 16, 1, true, false);
+        this.frameSize = (sampleRate / 1000) * 2 * 20;
+
+        lazyEncoder = MemoizingSupplier.memoize(() -> new OpusEncoder(sampleRate, frameSize, MTU_SIZE, JOPUS_MODE));
+        lazyDecoder = MemoizingSupplier.memoize(() -> new OpusDecoder(sampleRate, frameSize, MTU_SIZE));
+    }
 
 }

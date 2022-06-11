@@ -37,7 +37,7 @@ public class SoundBuilder {
         switch (soundFormat) {
             case WAV:
                 AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(inputStream);
-                sound = new AudioStreamSound(audioInputStream, PLUGIN.getPlasmoVoiceSoundPlayer().getCodecHolder(), true);
+                sound = new AudioStreamSound(audioInputStream, PLUGIN.getPlasmoVoiceSoundPlayer().createCodecHolder(), true);
                 break;
             case MP3:
                 sound = new MP3Sound(inputStream, PLUGIN.getPlasmoVoiceSoundPlayer());

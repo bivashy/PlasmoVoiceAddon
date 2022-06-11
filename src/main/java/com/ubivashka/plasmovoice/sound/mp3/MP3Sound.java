@@ -36,7 +36,7 @@ public class MP3Sound implements ISound {
                 baseFormat.getSampleRate(),
                 false);
         audioInputStream = new MpegFormatConversionProvider().getAudioInputStream(targetFormat, audioInputStream);
-        convertedSound = new AudioStreamSound(audioInputStream, player.getCodecHolder(), true);
+        convertedSound = new AudioStreamSound(audioInputStream, player.createCodecHolder(), true);
     }
 
     @Override
