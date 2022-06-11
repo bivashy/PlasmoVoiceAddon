@@ -45,6 +45,7 @@ public class MusicCommand {
     }
 
     @Subcommand("force file")
+    @CommandPermission("plasmo.addon.file")
     public void executeFileSubcommand(BukkitCommandActor actor, Player player, @PluginsFolder File file, @Default("100") @Flag("distance") int distance) {
         executeFileSubcommand(player, file, distance);
     }
