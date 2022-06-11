@@ -18,7 +18,7 @@ public class SoundBuilder {
     private SoundFormat soundFormat;
 
     public SoundBuilder(InputStream inputStream) {
-        if(!inputStream.markSupported())
+        if (!inputStream.markSupported())
             inputStream = new BufferedInputStream(inputStream);
         this.inputStream = inputStream;
         this.soundFormat = SoundFormat.findMatchingSoundFormat(this.inputStream);
@@ -32,6 +32,8 @@ public class SoundBuilder {
     public ISound build() throws UnsupportedAudioFileException, IOException {
         ISound sound = null;
         inputStream.reset();
+        if (soundFormat == null)
+            return null;
         switch (soundFormat) {
             case WAV:
                 AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(inputStream);

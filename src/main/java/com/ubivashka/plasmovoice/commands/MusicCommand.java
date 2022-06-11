@@ -5,18 +5,24 @@ import com.ubivashka.plasmovoice.audio.player.controller.PlasmoVoiceSoundControl
 import com.ubivashka.plasmovoice.audio.sources.PlayerAudioSource;
 import com.ubivashka.plasmovoice.commands.annotations.PluginsFolder;
 import com.ubivashka.plasmovoice.config.PluginConfig;
+import com.ubivashka.plasmovoice.progress.InputStreamProgressWrapper;
 import com.ubivashka.plasmovoice.sound.ISound;
 import com.ubivashka.plasmovoice.sound.SoundBuilder;
 import org.bukkit.Bukkit;
+import org.bukkit.boss.BossBar;
+import org.bukkit.entity.Player;
 import revxrsal.commands.annotation.*;
 import revxrsal.commands.bukkit.BukkitCommandActor;
+import revxrsal.commands.bukkit.annotation.CommandPermission;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.file.Files;
+import java.nio.file.Path;
 
 @Command("music")
 public class MusicCommand {
@@ -26,44 +32,70 @@ public class MusicCommand {
     private PluginConfig config;
 
     @Subcommand("file")
-    public void executeFileSubcommand(BukkitCommandActor actor, @PluginsFolder File file, @Default("100") @Flag("distance") int distance) {
+    public void executeFileSubcommand(Player player, @PluginsFolder File file, @Default("100") @Flag("distance") int distance) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
-                playInputStream(actor, Files.newInputStream(file.toPath()), distance);
+                Path path = file.toPath();
+                playInputStream(player, Files.newInputStream(path), Files.size(path), distance);
             } catch(IOException e) {
-                actor.reply(config.getMessages().getMessage("error-occurred"));
+                player.sendMessage(config.getMessages().getMessage("error-occurred"));
                 e.printStackTrace();
             }
         });
     }
 
+    @Subcommand("force file")
+    public void executeFileSubcommand(BukkitCommandActor actor, Player player, @PluginsFolder File file, @Default("100") @Flag("distance") int distance) {
+        executeFileSubcommand(player, file, distance);
+    }
+
 
     @Subcommand("reload")
+    @CommandPermission("plasmo.addon.reload")
     public void executeReloadSubcommand(BukkitCommandActor actor) {
         plugin.reload();
         actor.reply(config.getMessages().getMessage("config-reload"));
     }
 
     @Subcommand("url")
-    public void executeUrlSubcommand(BukkitCommandActor actor, URL musicUrl, @Default("100") @Flag("distance") int distance) {
+    public void executeUrlSubcommand(Player player, URL musicUrl, @Default("100") @Flag("distance") int distance) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
-                playInputStream(actor, musicUrl.openStream(), distance);
+                URLConnection connection = musicUrl.openConnection();
+                playInputStream(player, connection.getInputStream(), connection.getContentLengthLong(), distance);
             } catch(IOException e) {
-                actor.reply(config.getMessages().getMessage("error-occurred"));
+                player.sendMessage(config.getMessages().getMessage("error-occurred"));
                 e.printStackTrace();
             }
         });
     }
 
+    @Subcommand("force url")
+    @CommandPermission("plasmo.addon.url")
+    public void executeUrlSubcommand(BukkitCommandActor actor, Player player, URL musicUrl, @Default("100") @Flag("distance") int distance) {
+        executeUrlSubcommand(player, musicUrl, distance);
+    }
+
     @Command("musicurl")
-    public void executeUrlCommand(BukkitCommandActor actor, URL musicUrl, @Default("100") @Flag("distance") int distance) {
-        executeUrlSubcommand(actor, musicUrl, distance);
+    public void executeUrlCommand(Player player, URL musicUrl, @Default("100") @Flag("distance") int distance) {
+        executeUrlSubcommand(player, musicUrl, distance);
+    }
+
+    @Command("musicforceurl")
+    @CommandPermission("plasmo.addon.url")
+    public void executeUrlCommand(BukkitCommandActor actor, Player player, URL musicUrl, @Default("100") @Flag("distance") int distance) {
+        executeUrlSubcommand(player, musicUrl, distance);
     }
 
     @Command("musicfile")
-    public void executeFileCommand(BukkitCommandActor actor, @PluginsFolder File file, @Default("100") @Flag("distance") int distance) {
-        executeFileSubcommand(actor, file, distance);
+    public void executeFileCommand(Player player, @PluginsFolder File file, @Default("100") @Flag("distance") int distance) {
+        executeFileSubcommand(player, file, distance);
+    }
+
+    @Command("musicforcefile")
+    @CommandPermission("plasmo.addon.file")
+    public void executeFileCommand(BukkitCommandActor actor, Player player, @PluginsFolder File file, @Default("100") @Flag("distance") int distance) {
+        executeFileSubcommand(player, file, distance);
     }
 
     @Command("musicreload")
@@ -71,20 +103,29 @@ public class MusicCommand {
         executeReloadSubcommand(actor);
     }
 
-    private void playInputStream(BukkitCommandActor actor, InputStream soundStream, int distance) {
+    private void playInputStream(Player player, InputStream soundStream, long contentSize, int distance) {
+        BossBar bossBar = plugin.getPluginConfig().getBossbarConfiguration().createBossbar();
         try {
+            if (bossBar != null) {
+                bossBar.addPlayer(player);
+                soundStream = new InputStreamProgressWrapper(soundStream, contentSize).addListener(bossBar::setProgress);
+            }
             ISound sound = new SoundBuilder(soundStream).build();
 
             if (sound == null) {
-                actor.reply(config.getMessages().getMessage("cannot-create-sound"));
+                player.sendMessage(config.getMessages().getMessage("cannot-create-sound"));
                 return;
             }
 
-            PlayerAudioSource playerAudioSource = new PlayerAudioSource(actor.getUniqueId(), plugin.getPlasmoVoiceSoundPlayer());
-            playerAudioSource.sendAudioData(sound, new PlasmoVoiceSoundController(sound.getSoundFormat(),distance));
+            if (bossBar != null)
+                bossBar.removeAll();
+            PlayerAudioSource playerAudioSource = new PlayerAudioSource(player.getUniqueId(), plugin.getPlasmoVoiceSoundPlayer());
+            playerAudioSource.sendAudioData(sound, new PlasmoVoiceSoundController(sound.getSoundFormat(), distance));
         } catch(UnsupportedAudioFileException |
                 IOException e) {
-            actor.reply(config.getMessages().getMessage("error-occurred"));
+            if (bossBar != null)
+                bossBar.removeAll();
+            player.sendMessage(config.getMessages().getMessage("error-occurred"));
             e.printStackTrace();
         }
     }

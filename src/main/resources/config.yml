@@ -7,6 +7,7 @@ music-player-settings:
     sleep-delay: 20
 messages:
   not-enough-permission: '&cYou are not allowed to execute this command!'
+  player-not-found: 'Player not found!'
   missing-argument: '&cYou must specify a value for {0}'
   error-occurred: '&cAn error occurred while executing this command'
   invalid-url: '&cInvalid URL: {0}'
@@ -15,3 +16,8 @@ messages:
   file-not-exists: '&cFile not exists: {0}'
   cannot-create-sound: '&cCannot create sound, probably your input invalid'
   config-reload: '&aConfiguration successfully reloaded'
+progress-boss-bar:
+  title: '[ProgressBar] Download progress'
+  color: YELLOW # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/boss/BarColor.html
+  style: SOLID # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/boss/BarStyle.html
+  disabled: false # if true, bossbar will not appear

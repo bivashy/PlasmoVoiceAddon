@@ -3,6 +3,7 @@ package com.ubivashka.plasmovoice.config;
 import com.ubivashka.configuration.BukkitConfigurationProcessor;
 import com.ubivashka.configuration.ConfigurationProcessor;
 import com.ubivashka.configuration.annotations.ConfigField;
+import com.ubivashka.plasmovoice.config.bossbar.BossbarConfiguration;
 import com.ubivashka.plasmovoice.config.factories.ConfigurationHolderResolverFactory;
 import com.ubivashka.plasmovoice.config.settings.MusicPlayerSettings;
 import org.bukkit.configuration.Configuration;
@@ -15,6 +16,8 @@ public class PluginConfig {
     private MusicPlayerSettings wavMusicPlayerSettings = new MusicPlayerSettings();
     @ConfigField("music-player-settings.MP3")
     private MusicPlayerSettings mp3MusicPlayerSettings = new MusicPlayerSettings();
+    @ConfigField("progress-boss-bar")
+    private BossbarConfiguration bossbarConfiguration = new BossbarConfiguration();
     @ConfigField("messages")
     private Messages messages = new Messages();
 
@@ -39,5 +42,9 @@ public class PluginConfig {
 
     public MusicPlayerSettings getMp3MusicPlayerSettings() {
         return mp3MusicPlayerSettings;
+    }
+
+    public BossbarConfiguration getBossbarConfiguration() {
+        return bossbarConfiguration;
     }
 }

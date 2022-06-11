@@ -1,16 +1,52 @@
 package com.ubivashka.plasmovoice.commands.exception;
 
 import com.ubivashka.plasmovoice.config.PluginConfig;
+import revxrsal.commands.bukkit.exception.*;
 import revxrsal.commands.command.CommandActor;
 import revxrsal.commands.exception.*;
 
 import java.text.MessageFormat;
 
-public class CommandExceptionHandler extends DefaultExceptionHandler {
+public class CommandExceptionHandler extends BukkitExceptionAdapter {
     private final PluginConfig config;
 
     public CommandExceptionHandler(PluginConfig config) {
         this.config = config;
+    }
+
+    @Override
+    public void senderNotPlayer(CommandActor actor, SenderNotPlayerException exception) {
+    }
+
+    @Override
+    public void senderNotConsole(CommandActor actor, SenderNotConsoleException exception) {
+
+    }
+
+    @Override
+    public void invalidPlayer(CommandActor actor, InvalidPlayerException exception) {
+
+    }
+
+    @Override
+    public void invalidWorld(CommandActor actor, InvalidWorldException exception) {
+
+    }
+
+    @Override
+    public void malformedEntitySelector(CommandActor actor, MalformedEntitySelectorException exception) {
+
+
+    }
+
+    @Override
+    public void moreThanOnePlayer(CommandActor actor, MoreThanOnePlayerException exception) {
+
+    }
+
+    @Override
+    public void nonPlayerEntities(CommandActor actor, NonPlayerEntitiesException exception) {
+
     }
 
     @Override
