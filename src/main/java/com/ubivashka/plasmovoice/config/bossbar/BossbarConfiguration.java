@@ -1,14 +1,15 @@
 package com.ubivashka.plasmovoice.config.bossbar;
 
-import com.ubivashka.configuration.annotations.ConfigField;
-import com.ubivashka.configuration.annotations.ImportantField;
-import com.ubivashka.plasmovoice.config.ConfigurationHolder;
-import com.ubivashka.plasmovoice.config.PluginConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.configuration.ConfigurationSection;
+
+import com.ubivashka.configuration.ConfigurationHolder;
+import com.ubivashka.configuration.annotations.ConfigField;
+import com.ubivashka.configuration.annotations.ImportantField;
+import com.ubivashka.plasmovoice.config.PluginConfig;
 
 public class BossbarConfiguration implements ConfigurationHolder {
     @ImportantField
@@ -24,6 +25,7 @@ public class BossbarConfiguration implements ConfigurationHolder {
     public BossbarConfiguration() {
         isDisabled = true;
     }
+
     public BossbarConfiguration(ConfigurationSection configurationSection) {
         PluginConfig.CONFIGURATION_PROCESSOR.resolve(configurationSection, this);
     }

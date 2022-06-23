@@ -23,12 +23,11 @@
         <plasmovoice.api.version>1.0.9</plasmovoice.api.version>
         <jlayer.decoder.version>1.0.1.4</jlayer.decoder.version>
         <lamp.version>3.0.5</lamp.version>
-        <configuration.library.version>2.0.8</configuration.library.version>
+        <configuration.library.version>2.0.11</configuration.library.version>
         <mp3spi.version>1.9.5.4</mp3spi.version>
 
         <!-- Maven plugins -->
         <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
-        <maven.jar.plugin.version>3.2.0</maven.jar.plugin.version>
         <maven.source.plugin.version>3.2.0</maven.source.plugin.version>
     </properties>
 
@@ -93,13 +92,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- JLayer -->
-        <dependency>
-            <groupId>com.googlecode.soundlibs</groupId>
-            <artifactId>jlayer</artifactId>
-            <version>${jlayer.decoder.version}</version>
-        </dependency>
-
         <!-- Lamp command framework -->
         <dependency>
             <groupId>com.github.Revxrsal.Lamp</groupId>
@@ -122,6 +114,13 @@
             <groupId>com.github.U61vashka.ConfigurationLibrary</groupId>
             <artifactId>bukkit</artifactId>
             <version>${configuration.library.version}</version>
+        </dependency>
+
+        <!-- JLayer -->
+        <dependency>
+            <groupId>com.googlecode.soundlibs</groupId>
+            <artifactId>jlayer</artifactId>
+            <version>${jlayer.decoder.version}</version>
         </dependency>
 
         <!-- Libary for MP3 converting to AudioInputStream -->

@@ -1,9 +1,10 @@
 package com.ubivashka.plasmovoice.config.settings;
 
-import com.ubivashka.configuration.annotations.ConfigField;
-import com.ubivashka.plasmovoice.config.ConfigurationHolder;
-import com.ubivashka.plasmovoice.config.PluginConfig;
 import org.bukkit.configuration.ConfigurationSection;
+
+import com.ubivashka.configuration.ConfigurationHolder;
+import com.ubivashka.configuration.annotations.ConfigField;
+import com.ubivashka.plasmovoice.config.PluginConfig;
 
 public class MusicPlayerSettings implements ConfigurationHolder {
     @ConfigField("sleep-delay")

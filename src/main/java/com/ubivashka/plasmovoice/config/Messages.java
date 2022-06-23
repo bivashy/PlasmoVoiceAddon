@@ -1,9 +1,12 @@
 package com.ubivashka.plasmovoice.config;
 
-import net.md_5.bungee.api.ChatColor;
+import java.util.HashMap;
+
 import org.bukkit.configuration.ConfigurationSection;
 
-import java.util.HashMap;
+import com.ubivashka.configuration.ConfigurationHolder;
+
+import net.md_5.bungee.api.ChatColor;
 
 public class Messages implements ConfigurationHolder {
     private HashMap<String, String> messages = new HashMap<>();
