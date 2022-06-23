@@ -15,7 +15,7 @@ public class OpusCodecHolder extends AbstractCodecHolder {
     private static final int MTU_SIZE = 1024;
     private static final int JOPUS_MODE = Opus.OPUS_APPLICATION_AUDIO;
 
-    private Supplier<OpusEncoder> lazyEncoder = MemoizingSupplier.memoize(() -> new OpusEncoder(sampleRate, frameSize, MTU_SIZE, JOPUS_MODE, 64000));
+    private Supplier<OpusEncoder> lazyEncoder = MemoizingSupplier.memoize(() -> new OpusEncoder(sampleRate, frameSize, MTU_SIZE, JOPUS_MODE, -1));
     private Supplier<OpusDecoder> lazyDecoder = MemoizingSupplier.memoize(() -> new OpusDecoder(sampleRate, frameSize, MTU_SIZE));
 
     public OpusEncoder getEncoder() {
@@ -61,7 +61,7 @@ public class OpusCodecHolder extends AbstractCodecHolder {
         this.audioFormat = new AudioFormat(sampleRate, 16, 1, true, false);
         this.frameSize = (sampleRate / 1000) * 2 * 20;
 
-        lazyEncoder = MemoizingSupplier.memoize(() -> new OpusEncoder(sampleRate, frameSize, MTU_SIZE, JOPUS_MODE, 64000));
+        lazyEncoder = MemoizingSupplier.memoize(() -> new OpusEncoder(sampleRate, frameSize, MTU_SIZE, JOPUS_MODE, -1));
         lazyDecoder = MemoizingSupplier.memoize(() -> new OpusDecoder(sampleRate, frameSize, MTU_SIZE));
     }
 

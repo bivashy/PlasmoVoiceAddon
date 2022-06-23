@@ -25,7 +25,8 @@ public class OpusEncoder {
         IntBuffer error = IntBuffer.allocate(1);
         opusEncoder = Opus.INSTANCE.opus_encoder_create(sampleRate, 1, application, error);
         Opus.INSTANCE.opus_encoder_ctl(opusEncoder,Opus.OPUS_SET_SIGNAL_REQUEST,Opus.OPUS_SIGNAL_MUSIC);
-        Opus.INSTANCE.opus_encoder_ctl(opusEncoder,Opus.OPUS_SET_BITRATE_REQUEST,bitrate);
+        if (bitrate != -1)
+            Opus.INSTANCE.opus_encoder_ctl(opusEncoder, Opus.OPUS_SET_BITRATE_REQUEST, bitrate);
         if (error.get() != Opus.OPUS_OK && opusEncoder == null) {
             throw new IllegalStateException("Opus encoder error " + error.get());
         }
