@@ -47,7 +47,7 @@ public class AudioUtils {
     }
 
     public static short bytesToShort(byte b1, byte b2) {
-        return (short) ((b1 & 0xff) | (b2 << 8));
+        return (short) ((b1 & 0xFF) | (b2 << 8));
     }
 
     public static byte[] shortToBytes(short s) {

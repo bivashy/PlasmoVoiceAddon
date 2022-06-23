@@ -1,11 +1,16 @@
 package com.ubivashka.plasmovoice.audio.player.session;
 
-import com.ubivashka.plasmovoice.PlasmoVoiceAddon;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map.Entry;
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
 import com.ubivashka.plasmovoice.audio.player.controller.PlasmoVoiceSoundController;
 import com.ubivashka.plasmovoice.audio.sources.IPlayerAudioSource;
 import com.ubivashka.plasmovoice.sound.ISound;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+
 import su.plo.voice.common.packets.Packet;
 import su.plo.voice.common.packets.udp.PacketUDP;
 import su.plo.voice.common.packets.udp.VoiceEndServerPacket;
@@ -13,12 +18,7 @@ import su.plo.voice.common.packets.udp.VoiceServerPacket;
 import su.plo.voice.socket.SocketClientUDP;
 import su.plo.voice.socket.SocketServerUDP;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Map.Entry;
-
 public class PlasmoVoiceSoundPlaySession implements ISoundPlaySession {
-    private static final PlasmoVoiceAddon PLUGIN = PlasmoVoiceAddon.getPlugin(PlasmoVoiceAddon.class);
     private final ISound sound;
     private final IPlayerAudioSource playerAudioSource;
     private final PlasmoVoiceSoundController soundController;
@@ -29,7 +29,6 @@ public class PlasmoVoiceSoundPlaySession implements ISoundPlaySession {
         this.playerAudioSource = audioSource;
         this.soundController = soundController;
         this.player = Bukkit.getPlayer(playerAudioSource.getPlayerUniqueId());
-
         playSound();
     }
 
@@ -37,7 +36,7 @@ public class PlasmoVoiceSoundPlaySession implements ISoundPlaySession {
         int currentSequenceNumber = 0;
         List<byte[]> dataList = sound.getDataList();
         dataList.add(0, new byte[]{0, 0, 0}); // Add empty sound
-        for (byte[] data : sound.getDataList()) {
+        for (byte[] data : dataList) {
             int distance = soundController.getDistance();
             if (!soundController.isPlaying())
                 return;
@@ -56,6 +55,7 @@ public class PlasmoVoiceSoundPlaySession implements ISoundPlaySession {
             } catch(InterruptedException |
                     IOException e) {
                 e.printStackTrace();
+                break;
             }
         }
         VoiceEndServerPacket endServerPacket = new VoiceEndServerPacket(playerAudioSource.getPlayerUniqueId());

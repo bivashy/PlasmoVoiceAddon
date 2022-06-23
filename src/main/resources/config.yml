@@ -2,9 +2,13 @@ music-player-settings:
   # Данная настройка отвечает за скорость воспроизведения аудио, чем меньше тем быстрее, чем больше тем медленее
   # That settings controls speed of the audio, less value - faster, more value - slower audio.
   WAV:
-    sleep-delay: 12
+    sleep-delay: 20
+    bitrate: -1
+    volume: 100 # Volume has some "limit", you cannot set very high volume because of audio corruption
   MP3:
     sleep-delay: 20
+    bitrate: -1
+    volume: 100 # Volume has some "limit", you cannot set very high volume because of audio corruption
 messages:
   not-enough-permission: '&cYou are not allowed to execute this command!'
   player-not-found: 'Player not found!'

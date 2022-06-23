@@ -6,13 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InputStreamProgressWrapper extends InputStream {
-    private final List<ProgressListener> listeners = new ArrayList<>();
+    private final List<ProgressListener> progressListeners = new ArrayList<>();
+    private final List<Runnable> closeListeners = new ArrayList<>();
     private final long length;
     private InputStream in;
     private double percent;
     private int sumRead = 0;
 
-    public InputStreamProgressWrapper(InputStream inputStream, long length) throws IOException {
+    public InputStreamProgressWrapper(InputStream inputStream, long length) {
         this.in = inputStream;
         this.length = length;
     }
@@ -55,11 +56,22 @@ public class InputStreamProgressWrapper extends InputStream {
         if (!super.markSupported())
             return;
         percent = 0;
-        notifyListeners();
+        notifyProgressListeners();
     }
 
-    public InputStreamProgressWrapper addListener(ProgressListener listener) {
-        this.listeners.add(listener);
+    @Override
+    public void close() throws IOException{
+        super.close();
+        notifyCloseListeners();
+    }
+
+    public InputStreamProgressWrapper addProgressListener(ProgressListener listener) {
+        this.progressListeners.add(listener);
+        return this;
+    }
+
+    public InputStreamProgressWrapper addCloseListener(Runnable listener) {
+        this.closeListeners.add(listener);
         return this;
     }
 
@@ -68,11 +80,16 @@ public class InputStreamProgressWrapper extends InputStream {
             sumRead += readCount;
             percent = sumRead * 1.0 / length;
         }
-        notifyListeners();
+        notifyProgressListeners();
     }
 
-    private void notifyListeners() {
-        for (ProgressListener listener : listeners)
+    private void notifyProgressListeners() {
+        for (ProgressListener listener : progressListeners)
             listener.updateProgress((float) percent);
+    }
+
+    private void notifyCloseListeners() {
+        for (Runnable runnable : closeListeners)
+            runnable.run();
     }
 }

@@ -3,20 +3,20 @@ package com.ubivashka.plasmovoice.audio.player.controller;
 import com.ubivashka.plasmovoice.PlasmoVoiceAddon;
 import com.ubivashka.plasmovoice.audio.player.session.PlasmoVoiceSoundPlaySession;
 import com.ubivashka.plasmovoice.config.settings.MusicPlayerSettings;
-import com.ubivashka.plasmovoice.sound.SoundFormat;
+import com.ubivashka.plasmovoice.sound.ISoundFormat;
 
 public class PlasmoVoiceSoundController implements ISoundController {
     private static final PlasmoVoiceAddon PLUGIN = PlasmoVoiceAddon.getPlugin(PlasmoVoiceAddon.class);
-    private final SoundFormat soundFormat;
+    private final ISoundFormat soundFormat;
     private int distance;
     private PlasmoVoiceSoundPlaySession soundPlaySession;
     private boolean playing = true;
 
-    public PlasmoVoiceSoundController(SoundFormat soundFormat) {
+    public PlasmoVoiceSoundController(ISoundFormat soundFormat) {
         this(soundFormat, 100);
     }
 
-    public PlasmoVoiceSoundController(SoundFormat soundFormat, int distance) {
+    public PlasmoVoiceSoundController(ISoundFormat soundFormat, int distance) {
         this.soundFormat = soundFormat;
         this.distance = distance;
     }
@@ -27,22 +27,15 @@ public class PlasmoVoiceSoundController implements ISoundController {
     }
 
     @Override
-    public boolean isPlaying(){
+    public boolean isPlaying() {
         return playing;
     }
 
     public MusicPlayerSettings getMusicPlayerSettings() {
-        switch (soundFormat) {
-            case MP3:
-                return PLUGIN.getPluginConfig().getMp3MusicPlayerSettings();
-            case WAV:
-                return PLUGIN.getPluginConfig().getWavMusicPlayerSettings();
-            default:
-                throw new UnsupportedOperationException("Unrecognized sound format! Cannot find MusicPlayerSettings");
-        }
+        return soundFormat.getSettings();
     }
 
-    public SoundFormat getSoundFormat() {
+    public ISoundFormat getSoundFormat() {
         return soundFormat;
     }
 

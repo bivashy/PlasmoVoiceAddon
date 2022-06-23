@@ -1,6 +1,5 @@
 package com.ubivashka.plasmovoice.audio.player;
 
-import com.ubivashka.plasmovoice.audio.codecs.ICodecHolder;
 import com.ubivashka.plasmovoice.audio.player.controller.ISoundController;
 import com.ubivashka.plasmovoice.audio.player.session.ISoundPlaySession;
 import com.ubivashka.plasmovoice.audio.sources.IAudioSource;
@@ -16,9 +15,4 @@ public interface ISoundPlayer {
      * звука при надобности
      */
     ISoundPlaySession playSound(ISound sound, IAudioSource audioSource, ISoundController soundController);
-
-    /**
-     * @return Создаёт кодек с которым можно сжимать и обратить этот процесс.
-     */
-    ICodecHolder createCodecHolder();
 }
