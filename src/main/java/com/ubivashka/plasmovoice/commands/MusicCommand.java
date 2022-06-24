@@ -138,10 +138,7 @@ public class MusicCommand {
 
             PlayerAudioSource playerAudioSource = new PlayerAudioSource(player.getUniqueId(), plugin.getPlasmoVoiceSoundPlayer());
             playerAudioSource.sendAudioData(sound.get().newSoundFactory().createSound(bufferedInputStream),
-                    new PlasmoVoiceSoundController(sound.get(), distance));
-        } catch(IOException e) {
-            player.sendMessage(config.getMessages().getMessage("error-occurred"));
-            e.printStackTrace();
+                    IPlasmoVoiceSoundController.of(sound.get(), soundDistance));
         }
     }
 

@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import com.ubivashka.plasmovoice.audio.player.controller.PlasmoVoiceSoundController;
+import com.ubivashka.plasmovoice.audio.player.controller.IPlasmoVoiceSoundController;
 import com.ubivashka.plasmovoice.audio.sources.IPlayerAudioSource;
 import com.ubivashka.plasmovoice.sound.ISound;
 
@@ -21,10 +21,10 @@ import su.plo.voice.socket.SocketServerUDP;
 public class PlasmoVoiceSoundPlaySession implements ISoundPlaySession {
     private final ISound sound;
     private final IPlayerAudioSource playerAudioSource;
-    private final PlasmoVoiceSoundController soundController;
+    private final IPlasmoVoiceSoundController soundController;
     private final Player player;
 
-    public PlasmoVoiceSoundPlaySession(ISound sound, IPlayerAudioSource audioSource, PlasmoVoiceSoundController soundController) {
+    public PlasmoVoiceSoundPlaySession(ISound sound, IPlayerAudioSource audioSource, IPlasmoVoiceSoundController soundController) {
         this.sound = sound;
         this.playerAudioSource = audioSource;
         this.soundController = soundController;

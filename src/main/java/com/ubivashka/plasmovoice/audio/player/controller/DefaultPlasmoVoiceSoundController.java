@@ -5,18 +5,14 @@ import com.ubivashka.plasmovoice.audio.player.session.PlasmoVoiceSoundPlaySessio
 import com.ubivashka.plasmovoice.config.settings.MusicPlayerSettings;
 import com.ubivashka.plasmovoice.sound.ISoundFormat;
 
-public class PlasmoVoiceSoundController implements ISoundController {
+public class DefaultPlasmoVoiceSoundController implements IPlasmoVoiceSoundController {
     private static final PlasmoVoiceAddon PLUGIN = PlasmoVoiceAddon.getPlugin(PlasmoVoiceAddon.class);
     private final ISoundFormat soundFormat;
     private int distance;
     private PlasmoVoiceSoundPlaySession soundPlaySession;
     private boolean playing = true;
 
-    public PlasmoVoiceSoundController(ISoundFormat soundFormat) {
-        this(soundFormat, 100);
-    }
-
-    public PlasmoVoiceSoundController(ISoundFormat soundFormat, int distance) {
+    public DefaultPlasmoVoiceSoundController(ISoundFormat soundFormat, int distance) {
         this.soundFormat = soundFormat;
         this.distance = distance;
     }
@@ -43,17 +39,8 @@ public class PlasmoVoiceSoundController implements ISoundController {
         return distance;
     }
 
-    public PlasmoVoiceSoundController setDistance(int distance) {
+    public DefaultPlasmoVoiceSoundController setDistance(int distance) {
         this.distance = distance;
-        return this;
-    }
-
-    public PlasmoVoiceSoundPlaySession getSoundPlaySession() {
-        return soundPlaySession;
-    }
-
-    public PlasmoVoiceSoundController setSoundPlaySession(PlasmoVoiceSoundPlaySession soundPlaySession) {
-        this.soundPlaySession = soundPlaySession;
         return this;
     }
 }
