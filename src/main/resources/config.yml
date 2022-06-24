@@ -5,12 +5,14 @@ music-player-settings:
     sleep-delay: 20
     bitrate: -1
     volume: 100 # Volume has some "limit", you cannot set very high volume because of audio corruption
+    distance: 100
   MP3:
     sleep-delay: 20
     bitrate: -1
     volume: 100 # Volume has some "limit", you cannot set very high volume because of audio corruption
+    distance: 100 # Default sound distance that will be used
 messages:
-  not-enough-permission: '&cYou are not allowed to execute this command!'
+  not-enough-permission: '&cYou are not allowed to execute this command!' # Also occurs when player tries to change sound distance
   player-not-found: 'Player not found!'
   missing-argument: '&cYou must specify a value for {0}'
   error-occurred: '&cAn error occurred while executing this command'

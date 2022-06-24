@@ -1,14 +1,20 @@
 package com.ubivashka.plasmovoice.commands;
 
+import java.io.File;
+
+import org.bukkit.entity.Player;
+
 import com.ubivashka.plasmovoice.PlasmoVoiceAddon;
 import com.ubivashka.plasmovoice.commands.annotations.PluginsFolder;
+import com.ubivashka.plasmovoice.commands.argument.SoundDistance;
 import com.ubivashka.plasmovoice.commands.exception.CommandExceptionHandler;
 import com.ubivashka.plasmovoice.commands.exception.InvalidFIleException;
 import com.ubivashka.plasmovoice.config.PluginConfig;
-import revxrsal.commands.CommandHandler;
-import revxrsal.commands.bukkit.core.BukkitHandler;
 
-import java.io.File;
+import revxrsal.commands.CommandHandler;
+import revxrsal.commands.bukkit.BukkitCommandActor;
+import revxrsal.commands.bukkit.core.BukkitHandler;
+import revxrsal.commands.exception.NoPermissionException;
 
 public class CommandRegistry {
     private final CommandHandler commandHandler;
@@ -21,6 +27,15 @@ public class CommandRegistry {
 
     private void register(PlasmoVoiceAddon plugin) {
         commandHandler.setExceptionHandler(new CommandExceptionHandler(plugin.getPluginConfig()));
+
+        commandHandler.registerValueResolver(SoundDistance.class, context -> {
+            int distance = context.popInt();
+            Player player = context.actor().as(BukkitCommandActor.class).getAsPlayer();
+            if (!Integer.toString(distance).equals(context.parameter().getDefaultValue()) && player != null)
+                if (!player.hasPermission("plasmo.addon.distance." + distance))
+                    throw new NoPermissionException(context.command(), context.actor());
+            return new SoundDistance(context.popInt());
+        });
 
         commandHandler.registerValueResolver(File.class, (context) -> {
             String argument = context.pop();
