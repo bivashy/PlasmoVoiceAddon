@@ -20,7 +20,7 @@
         <!-- Dependencies -->
         <spigot.api.version>1.16.4-R0.1-SNAPSHOT</spigot.api.version>
         <jna.version>4.4.0</jna.version>
-        <plasmovoice.api.version>1.0.9</plasmovoice.api.version>
+        <plasmovoice.api.version>1.0.11</plasmovoice.api.version>
         <jlayer.decoder.version>1.0.1.4</jlayer.decoder.version>
         <lamp.version>3.0.5</lamp.version>
         <configuration.library.version>3.0.5</configuration.library.version>
@@ -32,6 +32,11 @@
     </properties>
 
     <repositories>
+        <repository>
+            <id>plasmo-repo</id>
+            <url>https://repo.plo.su</url>
+        </repository>
+
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
@@ -46,11 +51,6 @@
         <repository>
             <id>henkelmax.public</id>
             <url>https://maven.maxhenkel.de/repository/public</url>
-        </repository>
-
-        <repository>
-            <id>plasmo-repo</id>
-            <url>https://repo.plo.su</url>
         </repository>
 
         <repository>
@@ -88,7 +88,7 @@
         <dependency>
             <groupId>su.plo.voice</groupId>
             <artifactId>spigot</artifactId>
-            <version>${plasmovoice.api.version}</version>
+            <version>1.0.11</version>
             <scope>provided</scope>
         </dependency>
 
