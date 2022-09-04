@@ -22,6 +22,14 @@ public abstract class AbstractHolder<T> implements Holder<T> {
     }
 
     @Override
+    public Holder<T> add(int index, T object) {
+        if (object == null)
+            return this;
+        list.add(index, object);
+        return this;
+    }
+
+    @Override
     public Holder<T> remove(T object) {
         list.remove(object);
         return this;

@@ -7,15 +7,17 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 public interface Holder<T> {
-	List<T> getList();
+    List<T> getList();
 
-	Holder<T> add(T object);
+    Holder<T> add(T object);
 
-	Holder<T> remove(T object);
+    Holder<T> add(int index, T object);
 
-	Iterator<T> iterator();
+    Holder<T> remove(T object);
 
-	default Optional<T> findFirstByPredicate(Predicate<T> predicate) {
-		return getList().stream().filter(predicate).findFirst();
-	}
+    Iterator<T> iterator();
+
+    default Optional<T> findFirstByPredicate(Predicate<T> predicate) {
+        return getList().stream().filter(predicate).findFirst();
+    }
 }

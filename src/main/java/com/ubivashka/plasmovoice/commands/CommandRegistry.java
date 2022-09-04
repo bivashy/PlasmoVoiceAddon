@@ -34,7 +34,7 @@ public class CommandRegistry {
             if (!Integer.toString(distance).equals(context.parameter().getDefaultValue()) && player != null)
                 if (!player.hasPermission("plasmo.addon.distance." + distance))
                     throw new NoPermissionException(context.command(), context.actor());
-            return new SoundDistance(context.popInt());
+            return new SoundDistance(distance);
         });
 
         commandHandler.registerValueResolver(File.class, (context) -> {
