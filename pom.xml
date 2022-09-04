@@ -23,7 +23,7 @@
         <plasmovoice.api.version>1.0.9</plasmovoice.api.version>
         <jlayer.decoder.version>1.0.1.4</jlayer.decoder.version>
         <lamp.version>3.0.5</lamp.version>
-        <configuration.library.version>2.0.11</configuration.library.version>
+        <configuration.library.version>3.0.5</configuration.library.version>
         <mp3spi.version>1.9.5.4</mp3spi.version>
 
         <!-- Maven plugins -->

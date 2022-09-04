@@ -7,23 +7,23 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.configuration.ConfigurationSection;
 
 import com.ubivashka.configuration.ConfigurationHolder;
-import com.ubivashka.configuration.annotations.ConfigField;
-import com.ubivashka.configuration.annotations.ImportantField;
+import com.ubivashka.configuration.annotation.ConfigField;
+import com.ubivashka.configuration.annotation.ImportantField;
 import com.ubivashka.plasmovoice.config.PluginConfig;
 
 public class BossbarConfiguration implements ConfigurationHolder {
     @ImportantField
-    @ConfigField("title")
+    @ConfigField
     private String title;
-    @ConfigField("color")
+    @ConfigField
     private BarColor color = BarColor.PURPLE;
-    @ConfigField("style")
+    @ConfigField
     private BarStyle style = BarStyle.SEGMENTED_6;
-    @ConfigField("disabled")
-    private boolean isDisabled;
+    @ConfigField
+    private boolean disabled;
 
     public BossbarConfiguration() {
-        isDisabled = true;
+        disabled = true;
     }
 
     public BossbarConfiguration(ConfigurationSection configurationSection) {
@@ -43,11 +43,11 @@ public class BossbarConfiguration implements ConfigurationHolder {
     }
 
     public boolean isDisabled() {
-        return isDisabled;
+        return disabled;
     }
 
     public BossBar createBossbar() {
-        if (isDisabled)
+        if (disabled)
             return null;
         return Bukkit.createBossBar(title, color, style);
     }
