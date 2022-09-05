@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>PlasmoVoiceAddon</groupId>
     <artifactId>PlasmoVoiceAddon</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
     <properties>
         <!-- Manifest -->
         <manifest.contact>https://vk.me/bbaty45/</manifest.contact>
