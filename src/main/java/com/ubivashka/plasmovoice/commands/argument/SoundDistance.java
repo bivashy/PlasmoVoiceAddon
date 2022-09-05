@@ -7,7 +7,12 @@ public class SoundDistance {
         this.distance = distance;
     }
 
-    public int getValue() {
-        return distance;
+    /**
+     * Returns default value if "distance" value is less than 0, or else returns "distance"
+     *
+     * @param defaultValue - default value
+     */
+    public int getValue(int defaultValue) {
+        return distance < 0 ? defaultValue : distance;
     }
 }

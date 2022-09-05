@@ -22,7 +22,7 @@ public class CachedSoundJsonHolder extends AbstractJsonHolder<CachedSound> {
 
     public CachedSoundJsonHolder(PlasmoVoiceAddon plugin) {
         super(CachedSound.class, new File(plugin.getDataFolder() + File.separator + CACHE_DATA_FOLDER_NAME), new Gson());
-        this.cacheDirectory = new File(plugin.getDataFolder()+File.separator+CACHE_FOLDER_NAME);
+        this.cacheDirectory = new File(plugin.getDataFolder() + File.separator + CACHE_FOLDER_NAME);
         this.plugin = plugin;
 
         this.cacheDirectory.mkdirs();
@@ -33,7 +33,7 @@ public class CachedSoundJsonHolder extends AbstractJsonHolder<CachedSound> {
                 plugin.getCachedSoundHolder().findFirstByPredicate(sound -> sound.getUrl().equals(url.toString()));
         Optional<Path> cachedSoundPath = cachedSound.map(sound -> Paths.get(sound.getCachedFile()));
 
-        if (!cachedSound.isPresent() || forceCache) {
+        if (cachedSound.isEmpty() || forceCache) {
             Path musicPath = cachedSoundPath.orElse(File.createTempFile("music", "", cacheDirectory).toPath());
             Files.copy(connectionStream, musicPath, StandardCopyOption.REPLACE_EXISTING);
             connectionStream.close();

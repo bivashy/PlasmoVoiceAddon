@@ -10,6 +10,8 @@ import com.ubivashka.plasmovoice.commands.argument.SoundDistance;
 import com.ubivashka.plasmovoice.commands.exception.CommandExceptionHandler;
 import com.ubivashka.plasmovoice.commands.exception.InvalidFIleException;
 import com.ubivashka.plasmovoice.config.PluginConfig;
+import com.ubivashka.plasmovoice.config.settings.command.FileCommandSettings;
+import com.ubivashka.plasmovoice.config.settings.command.UrlCommandSettings;
 
 import revxrsal.commands.CommandHandler;
 import revxrsal.commands.bukkit.BukkitCommandActor;
@@ -54,10 +56,12 @@ public class CommandRegistry {
         });
 
         commandHandler.registerDependency(PluginConfig.class, plugin.getPluginConfig());
+        commandHandler.registerDependency(UrlCommandSettings.class, plugin.getPluginConfig().getMusicCommandSettings().getUrlCommandSettings());
+        commandHandler.registerDependency(FileCommandSettings.class, plugin.getPluginConfig().getMusicCommandSettings().getFileCommandSettings());
     }
 
     private void registerCommands() {
-        commandHandler.register(new MusicCommand());
+        commandHandler.register(new MusicReloadCommand(), new MusicFileCommand(), new MusicURLCommand());
     }
 }
 

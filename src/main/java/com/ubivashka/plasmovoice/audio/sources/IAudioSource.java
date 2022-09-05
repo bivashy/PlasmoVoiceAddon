@@ -1,6 +1,7 @@
 package com.ubivashka.plasmovoice.audio.sources;
 
 import com.ubivashka.plasmovoice.audio.player.controller.ISoundController;
+import com.ubivashka.plasmovoice.audio.player.session.ISoundPlaySession;
 import com.ubivashka.plasmovoice.sound.ISound;
 
 public interface IAudioSource {
@@ -12,7 +13,14 @@ public interface IAudioSource {
      *
      * @param sound           - Итоговый полный звук сжатый с помощью Opus
      * @param soundController - Контроллер плеера, контролирует настройку музыки и прочее.
+     * @return session of the sound that will need for controlling playing sound
      */
-    void sendAudioData(ISound sound, ISoundController soundController);
+    ISoundPlaySession sendAudioData(ISound sound, ISoundController soundController);
 
+    /**
+     * Last session that was sent with method {@link IAudioSource#sendAudioData(ISound, ISoundController)}}
+     *
+     * @return Last sent session, may be null.
+     */
+    ISoundPlaySession getLastSession();
 }

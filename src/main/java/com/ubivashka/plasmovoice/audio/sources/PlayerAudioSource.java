@@ -2,12 +2,14 @@ package com.ubivashka.plasmovoice.audio.sources;
 
 import com.ubivashka.plasmovoice.audio.player.ISoundPlayer;
 import com.ubivashka.plasmovoice.audio.player.controller.ISoundController;
+import com.ubivashka.plasmovoice.audio.player.session.ISoundPlaySession;
 import com.ubivashka.plasmovoice.sound.ISound;
 
 import java.util.UUID;
 
 public class PlayerAudioSource extends AbstractPlayerAudioSource {
     private final UUID playerUniqueId;
+    private ISoundPlaySession lastSession;
 
     public PlayerAudioSource(UUID playerUniqueId, ISoundPlayer soundPlayer) {
         super(soundPlayer);
@@ -20,9 +22,13 @@ public class PlayerAudioSource extends AbstractPlayerAudioSource {
     }
 
     @Override
-    public void sendAudioData(ISound sound, ISoundController soundController) {
-        soundPlayer.playSound(sound, this, soundController);
+    public ISoundPlaySession sendAudioData(ISound sound, ISoundController soundController) {
+        lastSession = soundPlayer.playSound(sound, this, soundController);
+        return lastSession;
     }
 
-
+    @Override
+    public ISoundPlaySession getLastSession() {
+        return lastSession;
+    }
 }

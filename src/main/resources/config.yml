@@ -11,6 +11,38 @@ music-player-settings:
     bitrate: -1
     volume: 100 # Volume has some "limit", you cannot set very high volume because of audio corruption
     distance: 100 # Default sound distance that will be used
+music-command-settings:
+  url:
+    enabled: true
+   #permission: your.permission.for.url
+    # Whitelisted schemes for url playing, for example allow only https,http scheme to prevent using another schemes like 'file'
+    # More detailed information: https://en.wikipedia.org/wiki/List_of_URI_schemes
+    whitelist-schemes:
+      - http
+      - https
+    # Plugin will prevent playing sound if url size greater than this value.
+    # Size is provided in bytes. 1048576 bytes is 100 megabyte.
+    # Use -1 for disabling size limit
+    size-limit: 1048576
+
+    # Some url audio can have undefined size, for example audio streams.
+    # If this value will be true, plugin will block url audio with undefined sizes
+    block-undefined-size: true
+    caching:
+      enabled: true
+
+  file:
+    enabled: true
+   #permission: your.permission.for.file
+
+    # By default plugin uses plugins/PlasmoVoiceAddon folder for music search.
+    # You can change this folder using this setting.
+   #folder: 'home/some/music'
+
+    # Plugin will prevent playing sound if file size greater than this value.
+    # Size is provided in bytes. 1048576 bytes is 100 megabyte.
+    # Use -1 for disabling size limit
+    size-limit: 1048576
 messages:
   not-enough-permission: '&cYou are not allowed to execute this command!' # Also occurs when player tries to change sound distance
   player-not-found: 'Player not found!'
@@ -22,6 +54,11 @@ messages:
   file-not-exists: '&cFile not exists: {0}'
   cannot-create-sound: '&cCannot create sound, probably your input invalid'
   config-reload: '&aConfiguration successfully reloaded'
+  invalid-size: '&cProvided music has invalid size because it`s: too big or has undefined size'
+  invalid-scheme: '&cProvided url is invalid!'
+  url-command-disabled: '&c/musicurl command was disabled by administrator!'
+  file-command-disabled: '&c/musicfile command was disabled by administrator!'
+
 progress-boss-bar:
   title: '[ProgressBar] Download progress'
   color: YELLOW # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/boss/BarColor.html
