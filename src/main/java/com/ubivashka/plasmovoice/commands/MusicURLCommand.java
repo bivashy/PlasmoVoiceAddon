@@ -63,7 +63,7 @@ public class MusicURLCommand {
                 InputStream urlStream = new BufferedInputStream(createProgressStream(connection.getInputStream(), connection.getContentLength(), player));
                 Optional<ISoundFormat> optionalSoundFormat = getSoundFormat(musicUrl, urlStream);
 
-                if (optionalSoundFormat.isEmpty()) {
+                if (!optionalSoundFormat.isPresent()) {
                     player.sendMessage(config.getMessages().getMessage("cannot-create-sound"));
                     urlStream.close();
                     return;

@@ -33,7 +33,7 @@ public class CachedSoundJsonHolder extends AbstractJsonHolder<CachedSound> {
                 plugin.getCachedSoundHolder().findFirstByPredicate(sound -> sound.getUrl().equals(url.toString()));
         Optional<Path> cachedSoundPath = cachedSound.map(sound -> Paths.get(sound.getCachedFile()));
 
-        if (cachedSound.isEmpty() || forceCache) {
+        if (!cachedSound.isPresent() || forceCache) {
             Path musicPath = cachedSoundPath.orElse(File.createTempFile("music", "", cacheDirectory).toPath());
             Files.copy(connectionStream, musicPath, StandardCopyOption.REPLACE_EXISTING);
             connectionStream.close();
