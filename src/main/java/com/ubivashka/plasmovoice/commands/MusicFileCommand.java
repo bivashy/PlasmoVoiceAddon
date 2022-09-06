@@ -96,7 +96,7 @@ public class MusicFileCommand {
 
     private InputStream createProgressStream(InputStream stream, long contentSize, Player player) {
         BossBar bossBar = plugin.getPluginConfig().getBossbarConfiguration().createBossbar();
-        if (bossBar == null)
+        if (bossBar == null || contentSize == -1)
             return stream;
         bossBar.addPlayer(player);
         return new InputStreamProgressWrapper(stream, contentSize).addProgressListener(bossBar::setProgress).addCloseListener(bossBar::removeAll);
