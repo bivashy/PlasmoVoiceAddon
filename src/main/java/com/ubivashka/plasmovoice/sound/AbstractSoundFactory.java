@@ -17,13 +17,24 @@ public abstract class AbstractSoundFactory implements ISoundFactory {
     public AbstractSoundFactory(ISoundFormat soundFormat) {
         this.soundFormat = soundFormat;
     }
+
     private static final VolumeAdjuster VOLUME_ADJUSTER = new VolumeAdjuster();
     protected final OpusCodecHolder opusCodecHolder = OpusCodecHolder.newCodecHolder();
 
     @Override
     public ISound createSound(InputStream audioStream) {
-        try(InputStream stream = audioStream) {
+        try (InputStream ignored = audioStream) {
             AudioInputStream audioInputStream = createAudioInputStream(audioStream);
+            return createSound(audioInputStream);
+        } catch(IOException | UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        }
+        opusCodecHolder.closeEncoder();
+        return ISound.of(new ArrayList<>(), soundFormat);
+    }
+
+    public ISound createSound(AudioInputStream audioInputStream) {
+        try {
             opusCodecHolder.setBitrate(soundFormat.getSettings().getBitrate());
             ISound result =
                     ISound.of(new AudioInputStreamReader(audioInputStream).withConverter(
@@ -32,11 +43,11 @@ public abstract class AbstractSoundFactory implements ISoundFactory {
                             soundFormat);
             opusCodecHolder.closeEncoder();
             return result;
-        } catch(IOException | UnsupportedAudioFileException e) {
+        } catch(IOException e) {
             e.printStackTrace();
+            opusCodecHolder.closeEncoder();
+            return ISound.of(new ArrayList<>(), soundFormat);
         }
-        opusCodecHolder.closeEncoder();
-        return ISound.of(new ArrayList<>(), soundFormat);
     }
 
     protected abstract AudioInputStream createAudioInputStream(InputStream sourceStream) throws UnsupportedAudioFileException, IOException;
