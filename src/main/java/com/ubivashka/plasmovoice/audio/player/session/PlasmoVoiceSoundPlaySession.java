@@ -51,7 +51,7 @@ public class PlasmoVoiceSoundPlaySession implements ISoundPlaySession {
             VoiceServerPacket soundPacket = new VoiceServerPacket(data, playerAudioSource.getPlayerUniqueId(), currentSequenceNumber++, (short) distance);
 
             try {
-                sendPacketToNearby(soundPacket, playerAudioSource, player);
+                sendPacketToNearby(soundPacket, playerAudioSource);
                 Thread.sleep(soundController.getMusicPlayerSettings().getSleepDelay());
             } catch(InterruptedException | IOException e) {
                 e.printStackTrace();
@@ -60,14 +60,14 @@ public class PlasmoVoiceSoundPlaySession implements ISoundPlaySession {
         }
         VoiceEndServerPacket endServerPacket = new VoiceEndServerPacket(playerAudioSource.getPlayerUniqueId());
         try {
-            sendPacketToNearby(endServerPacket, playerAudioSource, player);
+            sendPacketToNearby(endServerPacket, playerAudioSource);
         } catch(IOException e) {
             e.printStackTrace();
         }
         ended = true;
     }
 
-    private void sendPacketToNearby(Packet soundPacket, IPlayerAudioSource playerAudioSource, Player player) throws IOException {
+    private void sendPacketToNearby(Packet soundPacket, IPlayerAudioSource playerAudioSource) throws IOException {
         int distance = soundController.getDistance();
         double distanceSquared = distance * distance * 1.25D;
 
