@@ -34,9 +34,9 @@ public class PlasmoVoiceSoundPlaySession implements ISoundPlaySession {
 
     private void playSound() {
         int currentSequenceNumber = 0;
-        List<byte[]> dataList = sound.getDataList();
-        dataList.add(0, new byte[]{0, 0, 0}); // Add empty sound
-        for (byte[] data : dataList) {
+        ISoundFrameProvider frameProvider = sound.getFrameProvider();
+        for (int i = 0; i < frameProvider.getFramesCount(); i++) {
+            byte[] data = frameProvider.getFrame(i).getData();
             int distance = soundController.getDistance();
             if (!soundController.isPlaying())
                 return;
