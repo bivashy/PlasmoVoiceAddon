@@ -1,7 +1,6 @@
 package com.ubivashka.plasmovoice.audio.player.session;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
@@ -10,6 +9,7 @@ import org.bukkit.entity.Player;
 import com.ubivashka.plasmovoice.audio.player.controller.IPlasmoVoiceSoundController;
 import com.ubivashka.plasmovoice.audio.sources.IPlayerAudioSource;
 import com.ubivashka.plasmovoice.sound.ISound;
+import com.ubivashka.plasmovoice.sound.frame.ISoundFrameProvider;
 
 import su.plo.voice.common.packets.Packet;
 import su.plo.voice.common.packets.udp.PacketUDP;
@@ -23,6 +23,7 @@ public class PlasmoVoiceSoundPlaySession implements ISoundPlaySession {
     private final IPlayerAudioSource playerAudioSource;
     private final IPlasmoVoiceSoundController soundController;
     private final Player player;
+    private boolean ended;
 
     public PlasmoVoiceSoundPlaySession(ISound sound, IPlayerAudioSource audioSource, IPlasmoVoiceSoundController soundController) {
         this.sound = sound;
@@ -64,6 +65,7 @@ public class PlasmoVoiceSoundPlaySession implements ISoundPlaySession {
         } catch(IOException e) {
             e.printStackTrace();
         }
+        ended = true;
     }
 
     private void sendPacketToNearby(Packet soundPacket, IPlayerAudioSource playerAudioSource,
@@ -89,5 +91,11 @@ public class PlasmoVoiceSoundPlaySession implements ISoundPlaySession {
             }
             SocketServerUDP.sendTo(bytes, clientUDP);
         }
+    }
+
+
+    @Override
+    public boolean isEnded() {
+        return ended;
     }
 }
