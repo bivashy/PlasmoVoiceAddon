@@ -21,13 +21,13 @@ music-command-settings:
       - http
       - https
     # Plugin will prevent playing sound if url size greater than this value.
-    # Size is provided in bytes. 1048576 bytes is 100 megabyte.
+    # Size is provided in bytes.
     # Use -1 for disabling size limit
-    size-limit: 1048576
+    size-limit: -1
 
     # Some url audio can have undefined size, for example audio streams.
     # If this value will be true, plugin will block url audio with undefined sizes
-    block-undefined-size: true
+    block-undefined-size: false
     caching:
       enabled: true
 
@@ -40,9 +40,9 @@ music-command-settings:
    #folder: 'home/some/music'
 
     # Plugin will prevent playing sound if file size greater than this value.
-    # Size is provided in bytes. 1048576 bytes is 100 megabyte.
+    # Size is provided in bytes.
     # Use -1 for disabling size limit
-    size-limit: 1048576
+    size-limit: -1
 messages:
   not-enough-permission: '&cYou are not allowed to execute this command!' # Also occurs when player tries to change sound distance
   player-not-found: 'Player not found!'
