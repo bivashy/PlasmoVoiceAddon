@@ -1,6 +1,8 @@
 package com.ubivashka.plasmovoice.sound.holder.json;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -39,13 +41,13 @@ public class CachedSoundJsonHolder extends AbstractJsonHolder<CachedSound> {
             connectionStream.close();
 
             plugin.getCachedSoundHolder().add(new CachedSound(url.toString(), musicPath.toString()));
-            return Files.newInputStream(musicPath);
+            return new BufferedInputStream(new FileInputStream(musicPath.toFile()));
         } else {
             Path path = Paths.get(cachedSound.get().getCachedFile());
             if (!Files.exists(path))
                 return connectionStream;
             connectionStream.close();
-            return Files.newInputStream(cachedSoundPath.get());
+            return new BufferedInputStream(new FileInputStream(cachedSoundPath.get().toFile()));
         }
     }
 }
