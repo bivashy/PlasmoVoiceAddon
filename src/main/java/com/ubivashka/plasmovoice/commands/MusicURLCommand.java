@@ -12,11 +12,12 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 
 import com.ubivashka.plasmovoice.PlasmoVoiceAddon;
+import com.ubivashka.plasmovoice.audio.player.PlasmoVoiceSoundPlayer;
 import com.ubivashka.plasmovoice.audio.player.controller.IPlasmoVoiceSoundController;
-import com.ubivashka.plasmovoice.audio.sources.PlayerAudioSource;
 import com.ubivashka.plasmovoice.commands.argument.SoundDistance;
 import com.ubivashka.plasmovoice.config.PluginConfig;
 import com.ubivashka.plasmovoice.config.settings.command.UrlCommandSettings;
+import com.ubivashka.plasmovoice.event.MusicUrlPreCommandEvent;
 import com.ubivashka.plasmovoice.progress.InputStreamProgressWrapper;
 import com.ubivashka.plasmovoice.sound.ISoundFormat;
 
@@ -61,6 +62,8 @@ public class MusicURLCommand {
                 }
 
                 InputStream urlStream = new BufferedInputStream(createProgressStream(connection.getInputStream(), connection.getContentLength(), player));
+                MusicUrlPreCommandEvent event = new MusicUrlPreCommandEvent(player, musicUrl, urlStream);
+                Bukkit.getPluginManager().callEvent(event);
                 Optional<ISoundFormat> optionalSoundFormat = getSoundFormat(musicUrl, urlStream);
 
                 if (!optionalSoundFormat.isPresent()) {
@@ -73,8 +76,8 @@ public class MusicURLCommand {
                 if (settings.getCachingSettings().isEnabled())
                     urlStream = plugin.getCachedSoundHolder().createCachedInputStream(musicUrl, urlStream, forceCache);
 
-                PlayerAudioSource playerAudioSource = new PlayerAudioSource(player.getUniqueId(), plugin.getPlasmoVoiceSoundPlayer());
-                playerAudioSource.sendAudioData(soundFormat.newSoundFactory().createSound(musicUrl, urlStream),
+                PlasmoVoiceSoundPlayer soundPlayer = plugin.getPlasmoVoiceSoundPlayer(player.getUniqueId());
+                soundPlayer.playSound(soundFormat.newSoundFactory().createSound(musicUrl, urlStream),
                         IPlasmoVoiceSoundController.of(soundFormat, distance.getValue(soundFormat.getSettings().getDistance())));
                 urlStream.close();
             } catch(IOException e) {

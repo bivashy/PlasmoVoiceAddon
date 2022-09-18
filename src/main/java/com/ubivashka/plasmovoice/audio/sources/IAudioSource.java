@@ -20,4 +20,11 @@ public interface IAudioSource {
      * @return Last sent session, may be null.
      */
     ISoundPlaySession getLastSession();
+
+    /**
+     * Set last session. Mostly required for ISoundPlayer.
+     *
+     * @param lastSession new last session
+     */
+    void setLastSession(ISoundPlaySession lastSession);
 }

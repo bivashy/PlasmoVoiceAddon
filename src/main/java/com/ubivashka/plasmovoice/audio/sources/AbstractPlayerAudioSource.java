@@ -3,13 +3,6 @@ package com.ubivashka.plasmovoice.audio.sources;
 import com.ubivashka.plasmovoice.audio.player.ISoundPlayer;
 
 public abstract class AbstractPlayerAudioSource implements IPlayerAudioSource {
-
-	protected final ISoundPlayer soundPlayer;
-
-	public AbstractPlayerAudioSource(ISoundPlayer soundPlayer) {
-		this.soundPlayer = soundPlayer;
-	}
-
 	protected boolean canHearSource = true;
 	protected boolean turnOffOnLeave = true;
 

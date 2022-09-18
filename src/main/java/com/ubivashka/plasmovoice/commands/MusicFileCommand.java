@@ -13,8 +13,8 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 
 import com.ubivashka.plasmovoice.PlasmoVoiceAddon;
+import com.ubivashka.plasmovoice.audio.player.PlasmoVoiceSoundPlayer;
 import com.ubivashka.plasmovoice.audio.player.controller.IPlasmoVoiceSoundController;
-import com.ubivashka.plasmovoice.audio.sources.PlayerAudioSource;
 import com.ubivashka.plasmovoice.commands.annotations.PluginsFolder;
 import com.ubivashka.plasmovoice.commands.argument.SoundDistance;
 import com.ubivashka.plasmovoice.config.PluginConfig;
@@ -64,8 +64,8 @@ public class MusicFileCommand {
                 }
                 ISoundFormat soundFormat = optionalSoundFormat.get();
 
-                PlayerAudioSource playerAudioSource = new PlayerAudioSource(player.getUniqueId(), plugin.getPlasmoVoiceSoundPlayer());
-                playerAudioSource.sendAudioData(soundFormat.newSoundFactory().createSound(file, fileStream),
+                PlasmoVoiceSoundPlayer soundPlayer = plugin.getPlasmoVoiceSoundPlayer(player.getUniqueId());
+                soundPlayer.playSound(soundFormat.newSoundFactory().createSound(file, fileStream),
                         IPlasmoVoiceSoundController.of(soundFormat, distance.getValue(soundFormat.getSettings().getDistance())));
                 fileStream.close();
             } catch(IOException e) {

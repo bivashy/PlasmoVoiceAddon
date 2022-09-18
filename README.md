@@ -57,11 +57,10 @@ PlasmoVoiceAddon is a music player (Supports mp3 and wav) from url or local file
     Player player = //Your player
     int soundDistance = 100; //Maximum distance that will be music played
 
-    PlayerAudioSource playerAudioSource = new PlayerAudioSource(player.getUniqueId(),
-								addon.getPlasmoVoiceSoundPlayer());
+    PlasmoVoiceSoundPlayer soundPlayer = addon.getPlasmoVoiceSoundPlayer(player.getUniqueId());
     ISound sound = soundFormat.get().newSoundFactory().createSound(inputStream); // This line will automatically close InputStream, after you cannot use stream!
     IPlasmoVoiceSoundController soundController = IPlasmoVoiceSoundController.of(soundFormat.get(), soundDistance));
-    playerAudioSource.sendAudioData(sound,soundController);
+    soundPlayer.playSound(sound,soundController);
 
   **How to add custom ISoundFormat (For example Mp3)**
   1. Create class that implements ISoundFormat
