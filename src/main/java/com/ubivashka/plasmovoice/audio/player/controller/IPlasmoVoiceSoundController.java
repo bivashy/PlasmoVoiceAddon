@@ -3,7 +3,7 @@ package com.ubivashka.plasmovoice.audio.player.controller;
 import com.ubivashka.plasmovoice.config.settings.MusicPlayerSettings;
 import com.ubivashka.plasmovoice.sound.ISoundFormat;
 
-public interface IPlasmoVoiceSoundController extends ISoundController{
+public interface IPlasmoVoiceSoundController extends ISoundController {
     MusicPlayerSettings getMusicPlayerSettings();
 
     int getDistance();
@@ -12,7 +12,7 @@ public interface IPlasmoVoiceSoundController extends ISoundController{
 
     IPlasmoVoiceSoundController setDistance(int distance);
 
-    static IPlasmoVoiceSoundController of(ISoundFormat soundFormat,int distance){
-        return new DefaultPlasmoVoiceSoundController(soundFormat,distance);
+    static IPlasmoVoiceSoundController of(ISoundFormat soundFormat, int distance) {
+        return new DefaultPlasmoVoiceSoundController(soundFormat, distance);
     }
 }
