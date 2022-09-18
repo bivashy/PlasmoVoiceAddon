@@ -4,23 +4,22 @@ import javax.sound.sampled.AudioFormat;
 
 public interface ICodecHolder {
     /**
-     * @return Частота дискретизации. Простыми словами диапозон звука.
+     * @return sample rate.
      */
     int getSampleRate();
 
     /**
-     * @param sampleRate - Частота дискретизации. Внимание! Данный метод меняет и
-     *                   другие значения такие как framzeSize, и audioformat
+     * @param sampleRate - sample rate. Warning! This method may change framzeSize, and audioformat
      */
     void setSampleRate(int sampleRate);
 
     /**
-     * @return Возвращает размер аудиокадра. Требуется для создания SoundData
+     * @return frame size. Needed for SoundData
      */
     int getFrameSize();
 
     /**
-     * @return Возвращает формат аудио.
+     * @return audio format.
      */
     AudioFormat getAudioFormat();
 

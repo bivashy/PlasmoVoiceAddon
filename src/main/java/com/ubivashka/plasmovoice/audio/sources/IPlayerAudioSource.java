@@ -2,31 +2,38 @@ package com.ubivashka.plasmovoice.audio.sources;
 
 import java.util.UUID;
 
+import org.bukkit.Location;
+
 public interface IPlayerAudioSource extends IAudioSource {
     /**
-     * @return UUID. Возвращает UUID игрока. Игрок может быть оффлайн
+     * @return UUID. Returns player UUID. Player may be offline.
      */
     UUID getPlayerUniqueId();
 
     /**
-     * @return boolean. Возвращает значение которое определяет может ли слышать музыку которую воспроизводит.
+     * @return Location. Location where sound will be played.
+     */
+    Location getPlayerLocation();
+
+    /**
+     * @return boolean. Resolves can player that creates that sound hear source.
      */
     boolean canHearSource();
 
     /**
-     * Данным методом можно выбрать, слышит ли игрок музыку которую воспроизводит.
+     * You can set when player can hear himself playing music or not.
      *
-     * @param canHear - Может ли слышать игрок музыку которую воспроизводит.
+     * @param canHear - can player hear playing music.
      */
     void setHearSource(boolean canHear);
 
     /**
-     * @return boolean. Проигрывать ли музыку после перезахода игрока
+     * @return boolean. Disable music on player leave.
      */
     boolean isTurnOffOnLeave();
 
     /**
-     * @param turnOffOnLeave - Решает проигрывать ли музыку после того как игрок перезайдет на сервер
+     * @param turnOffOnLeave - Disable music on player leave.
      */
     void setTurnOffOnLeave(boolean turnOffOnLeave);
 }

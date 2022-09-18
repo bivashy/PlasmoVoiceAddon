@@ -6,13 +6,10 @@ import com.ubivashka.plasmovoice.sound.ISound;
 
 public interface IAudioSource {
     /**
-     * Отправка данных звука в сжатом виде с помощью Opus. Если у вас файл, то нужно
-     * отправлять разделяя аудио файл (в данный момент только wav) Смотреть
-     * подробнее об разделении звука wav файла:
-     * <a href="https://stackoverflow.com/questions/2416935/how-to-play-wav-files-with-java">https://stackoverflow.com/questions/2416935/how-to-play-wav-files-with-java</a>
+     * Send audio data in specific format.
      *
-     * @param sound           - Итоговый полный звук сжатый с помощью Opus
-     * @param soundController - Контроллер плеера, контролирует настройку музыки и прочее.
+     * @param sound           - Sound that proceeded with {@link com.ubivashka.plasmovoice.audio.codecs.ICodecHolder}.
+     * @param soundController - Sound controller.
      * @return session of the sound that will need for controlling playing sound
      */
     ISoundPlaySession sendAudioData(ISound sound, ISoundController soundController);

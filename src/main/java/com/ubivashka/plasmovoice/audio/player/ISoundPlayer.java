@@ -8,11 +8,10 @@ import com.ubivashka.plasmovoice.sound.ISound;
 public interface ISoundPlayer {
 
     /**
-     * @param sound            - Проигрываемый звук
-     * @param audioSource      - Источник звука
-     * @param soundController  - Контроллер плеера, контролирует настройку музыки и прочее.
-     * @return {@link ISoundPlaySession} - Сессия звука, можно отменить проигрывание
-     * звука при надобности
+     * @param sound            - Playing sound
+     * @param audioSource      - Sound source
+     * @param soundController  - Sound controller.
+     * @return {@link ISoundPlaySession} - Sound session, can cancel music playing, check if music playing ended.
      */
     ISoundPlaySession playSound(ISound sound, IAudioSource audioSource, ISoundController soundController);
 }
