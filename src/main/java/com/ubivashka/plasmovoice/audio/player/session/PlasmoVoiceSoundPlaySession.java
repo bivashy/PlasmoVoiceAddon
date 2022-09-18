@@ -39,13 +39,14 @@ public class PlasmoVoiceSoundPlaySession implements ISoundPlaySession {
         for (int i = 0; i < frameProvider.getFramesCount(); i++) {
             byte[] data = frameProvider.getFrame(i).getData();
             int distance = soundController.getDistance();
-            if (!soundController.isPlaying())
+            if (!soundController.isPlaying()) {
+                ended = true;
                 return;
+            }
 
-            if (player == null || !player.isOnline()) {
-                if (playerAudioSource.isTurnOffOnLeave())
-                    return;
-                continue;
+            if ((player == null || !player.isOnline()) && playerAudioSource.isTurnOffOnLeave()) {
+                ended = true;
+                return;
             }
             VoiceServerPacket soundPacket = new VoiceServerPacket(data, playerAudioSource.getPlayerUniqueId(), currentSequenceNumber++, (short) distance);
 
@@ -80,9 +81,9 @@ public class PlasmoVoiceSoundPlaySession implements ISoundPlaySession {
             if (!playerAudioSource.canHearSource() && receivePlayer.getUniqueId().equals(playerAudioSource.getPlayerUniqueId()))
                 return;
             if (distanceSquared > 0.0D) {
-                if (!player.getLocation().getWorld().getUID().equals(receivePlayer.getLocation().getWorld().getUID()))
+                if (!playerAudioSource.getPlayerLocation().getWorld().getUID().equals(receivePlayer.getLocation().getWorld().getUID()))
                     return;
-                if (player.getLocation().distanceSquared(receivePlayer.getLocation()) > distanceSquared)
+                if (playerAudioSource.getPlayerLocation().distanceSquared(receivePlayer.getLocation()) > distanceSquared)
                     return;
             }
             SocketServerUDP.sendTo(bytes, clientUDP);
