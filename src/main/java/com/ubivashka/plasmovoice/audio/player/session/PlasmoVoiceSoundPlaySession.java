@@ -47,14 +47,12 @@ public class PlasmoVoiceSoundPlaySession implements ISoundPlaySession {
                     return;
                 continue;
             }
-            VoiceServerPacket soundPacket = new VoiceServerPacket(data, playerAudioSource.getPlayerUniqueId(),
-                    currentSequenceNumber++, (short) distance);
+            VoiceServerPacket soundPacket = new VoiceServerPacket(data, playerAudioSource.getPlayerUniqueId(), currentSequenceNumber++, (short) distance);
 
             try {
                 sendPacketToNearby(soundPacket, playerAudioSource, player);
                 Thread.sleep(soundController.getMusicPlayerSettings().getSleepDelay());
-            } catch(InterruptedException |
-                    IOException e) {
+            } catch(InterruptedException | IOException e) {
                 e.printStackTrace();
                 break;
             }
@@ -68,8 +66,7 @@ public class PlasmoVoiceSoundPlaySession implements ISoundPlaySession {
         ended = true;
     }
 
-    private void sendPacketToNearby(Packet soundPacket, IPlayerAudioSource playerAudioSource,
-                                    Player player) throws IOException {
+    private void sendPacketToNearby(Packet soundPacket, IPlayerAudioSource playerAudioSource, Player player) throws IOException {
         int distance = soundController.getDistance();
         double distanceSquared = distance * distance * 1.25D;
 
@@ -80,8 +77,7 @@ public class PlasmoVoiceSoundPlaySession implements ISoundPlaySession {
             SocketClientUDP clientUDP = entry.getValue();
             if (receivePlayer == null)
                 return;
-            if (!playerAudioSource.canHearSource()
-                    && receivePlayer.getUniqueId().equals(playerAudioSource.getPlayerUniqueId()))
+            if (!playerAudioSource.canHearSource() && receivePlayer.getUniqueId().equals(playerAudioSource.getPlayerUniqueId()))
                 return;
             if (distanceSquared > 0.0D) {
                 if (!player.getLocation().getWorld().getUID().equals(receivePlayer.getLocation().getWorld().getUID()))
