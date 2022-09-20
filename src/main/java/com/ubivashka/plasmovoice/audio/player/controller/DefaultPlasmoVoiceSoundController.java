@@ -6,11 +6,11 @@ import com.ubivashka.plasmovoice.config.settings.MusicPlayerSettings;
 import com.ubivashka.plasmovoice.sound.ISoundFormat;
 
 public class DefaultPlasmoVoiceSoundController implements IPlasmoVoiceSoundController {
-    private static final PlasmoVoiceAddon PLUGIN = PlasmoVoiceAddon.getPlugin(PlasmoVoiceAddon.class);
     private final ISoundFormat soundFormat;
-    private int distance;
-    private PlasmoVoiceSoundPlaySession soundPlaySession;
     private boolean playing = true;
+    private int distance;
+    private boolean canHearSource = true;
+    private boolean turnOffOnLeave = true;
 
     public DefaultPlasmoVoiceSoundController(ISoundFormat soundFormat, int distance) {
         this.soundFormat = soundFormat;
@@ -42,5 +42,25 @@ public class DefaultPlasmoVoiceSoundController implements IPlasmoVoiceSoundContr
     public DefaultPlasmoVoiceSoundController setDistance(int distance) {
         this.distance = distance;
         return this;
+    }
+
+    @Override
+    public boolean canHearSource() {
+        return canHearSource;
+    }
+
+    @Override
+    public void setHearSource(boolean canHearSource) {
+        this.canHearSource = canHearSource;
+    }
+
+    @Override
+    public boolean isTurnOffOnLeave() {
+        return turnOffOnLeave;
+    }
+
+    @Override
+    public void setTurnOffOnLeave(boolean turnOffOnLeave) {
+        this.turnOffOnLeave = turnOffOnLeave;
     }
 }

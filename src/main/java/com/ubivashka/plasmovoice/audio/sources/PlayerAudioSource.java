@@ -1,18 +1,17 @@
 package com.ubivashka.plasmovoice.audio.sources;
 
-import com.ubivashka.plasmovoice.PlasmoVoiceAddon;
-import com.ubivashka.plasmovoice.audio.player.ISoundPlayer;
-import com.ubivashka.plasmovoice.audio.player.controller.ISoundController;
-import com.ubivashka.plasmovoice.audio.player.session.ISoundPlaySession;
-import com.ubivashka.plasmovoice.sound.ISound;
-
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-public class PlayerAudioSource extends AbstractPlayerAudioSource {
+import com.ubivashka.plasmovoice.PlasmoVoiceAddon;
+import com.ubivashka.plasmovoice.audio.player.controller.ISoundController;
+import com.ubivashka.plasmovoice.audio.player.session.ISoundPlaySession;
+import com.ubivashka.plasmovoice.sound.ISound;
+
+public class PlayerAudioSource implements IPlayerAudioSource {
     private static final PlasmoVoiceAddon PLUGIN = PlasmoVoiceAddon.getPlugin(PlasmoVoiceAddon.class);
     private final UUID playerUniqueId;
     private ISoundPlaySession lastSession;
