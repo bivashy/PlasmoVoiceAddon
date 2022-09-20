@@ -15,7 +15,7 @@ import com.ubivashka.plasmovoice.PlasmoVoiceAddon;
 import com.ubivashka.plasmovoice.audio.player.PlasmoVoiceSoundPlayer;
 import com.ubivashka.plasmovoice.audio.player.session.PlasmoVoiceSoundPlaySession;
 import com.ubivashka.plasmovoice.commands.argument.SoundDistance;
-import com.ubivashka.plasmovoice.config.PluginConfig;
+import com.ubivashka.plasmovoice.commands.exception.SendMessageWithKeyException;
 import com.ubivashka.plasmovoice.config.settings.command.UrlCommandSettings;
 import com.ubivashka.plasmovoice.progress.InputStreamProgressWrapper;
 
@@ -26,7 +26,6 @@ import revxrsal.commands.annotation.Flag;
 import revxrsal.commands.annotation.Subcommand;
 import revxrsal.commands.bukkit.BukkitCommandActor;
 import revxrsal.commands.bukkit.annotation.CommandPermission;
-import revxrsal.commands.exception.SendMessageException;
 
 @Command("music")
 public class MusicURLCommand {
@@ -38,11 +37,11 @@ public class MusicURLCommand {
     @Subcommand("url")
     public void executeUrlSubcommand(Player player, URL musicUrl, @Default("-1") @Flag("distance") SoundDistance distance) {
         if (!settings.isEnabled())
-            throw new SendMessageException(config.getMessages().getMessage("url-command-disabled"));
+            throw new SendMessageWithKeyException("url-command-disabled");
         if (settings.getPermission().isPresent() && !player.hasPermission(settings.getPermission().get()))
-            throw new SendMessageException(config.getMessages().getMessage("not-enough-permission"));
+            throw new SendMessageWithKeyException("not-enough-permission");
         if (!settings.getWhitelistSchemes().contains(musicUrl.getProtocol()))
-            throw new SendMessageException(config.getMessages().getMessage("invalid-scheme"));
+            throw new SendMessageWithKeyException("invalid-scheme");
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
                 URLConnection connection = musicUrl.openConnection();

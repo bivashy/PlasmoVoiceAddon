@@ -17,7 +17,7 @@ import com.ubivashka.plasmovoice.audio.player.PlasmoVoiceSoundPlayer;
 import com.ubivashka.plasmovoice.audio.player.session.PlasmoVoiceSoundPlaySession;
 import com.ubivashka.plasmovoice.commands.annotations.PluginsFolder;
 import com.ubivashka.plasmovoice.commands.argument.SoundDistance;
-import com.ubivashka.plasmovoice.config.PluginConfig;
+import com.ubivashka.plasmovoice.commands.exception.SendMessageWithKeyException;
 import com.ubivashka.plasmovoice.config.settings.command.FileCommandSettings;
 import com.ubivashka.plasmovoice.progress.InputStreamProgressWrapper;
 
@@ -28,7 +28,6 @@ import revxrsal.commands.annotation.Flag;
 import revxrsal.commands.annotation.Subcommand;
 import revxrsal.commands.bukkit.BukkitCommandActor;
 import revxrsal.commands.bukkit.annotation.CommandPermission;
-import revxrsal.commands.exception.SendMessageException;
 
 @Command("music")
 public class MusicFileCommand {
@@ -40,9 +39,9 @@ public class MusicFileCommand {
     @Subcommand("file")
     public void executeFileSubcommand(Player player, @PluginsFolder File file, @Default("-1") @Flag("distance") SoundDistance distance) {
         if (!settings.isEnabled())
-            throw new SendMessageException(config.getMessages().getMessage("file-command-disabled"));
+            throw new SendMessageWithKeyException("file-command-disabled");
         if (settings.getPermission().isPresent() && !player.hasPermission(settings.getPermission().get()))
-            throw new SendMessageException(config.getMessages().getMessage("not-enough-permission"));
+            throw new SendMessageWithKeyException("not-enough-permission");
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             Path path = file.toPath();
             try {

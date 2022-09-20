@@ -9,6 +9,7 @@ import com.ubivashka.plasmovoice.commands.annotations.PluginsFolder;
 import com.ubivashka.plasmovoice.commands.argument.SoundDistance;
 import com.ubivashka.plasmovoice.commands.exception.CommandExceptionHandler;
 import com.ubivashka.plasmovoice.commands.exception.InvalidFIleException;
+import com.ubivashka.plasmovoice.commands.exception.SendMessageWithKeyException;
 import com.ubivashka.plasmovoice.config.PluginConfig;
 import com.ubivashka.plasmovoice.config.settings.command.FileCommandSettings;
 import com.ubivashka.plasmovoice.config.settings.command.UrlCommandSettings;
@@ -29,6 +30,7 @@ public class CommandRegistry {
 
     private void register(PlasmoVoiceAddon plugin) {
         commandHandler.setExceptionHandler(new CommandExceptionHandler(plugin.getPluginConfig()));
+        commandHandler.registerExceptionHandler(SendMessageWithKeyException.class, (actor, e) -> e.sendTo(actor));
 
         commandHandler.registerValueResolver(SoundDistance.class, context -> {
             int distance = context.popInt();
