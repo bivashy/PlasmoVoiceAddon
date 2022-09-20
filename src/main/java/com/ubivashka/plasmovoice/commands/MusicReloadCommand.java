@@ -9,7 +9,7 @@ import revxrsal.commands.annotation.Subcommand;
 import revxrsal.commands.bukkit.BukkitCommandActor;
 import revxrsal.commands.bukkit.annotation.CommandPermission;
 
-@Command("reload")
+@Command("music")
 public class MusicReloadCommand {
     @Dependency
     private PlasmoVoiceAddon plugin;
