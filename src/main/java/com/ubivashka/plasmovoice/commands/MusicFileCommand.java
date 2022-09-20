@@ -14,13 +14,12 @@ import org.bukkit.entity.Player;
 
 import com.ubivashka.plasmovoice.PlasmoVoiceAddon;
 import com.ubivashka.plasmovoice.audio.player.PlasmoVoiceSoundPlayer;
-import com.ubivashka.plasmovoice.audio.player.controller.IPlasmoVoiceSoundController;
+import com.ubivashka.plasmovoice.audio.player.session.PlasmoVoiceSoundPlaySession;
 import com.ubivashka.plasmovoice.commands.annotations.PluginsFolder;
 import com.ubivashka.plasmovoice.commands.argument.SoundDistance;
 import com.ubivashka.plasmovoice.config.PluginConfig;
 import com.ubivashka.plasmovoice.config.settings.command.FileCommandSettings;
 import com.ubivashka.plasmovoice.progress.InputStreamProgressWrapper;
-import com.ubivashka.plasmovoice.sound.ISoundFormat;
 
 import revxrsal.commands.annotation.Command;
 import revxrsal.commands.annotation.Default;
@@ -36,8 +35,6 @@ public class MusicFileCommand {
     @Dependency
     private PlasmoVoiceAddon plugin;
     @Dependency
-    private PluginConfig config;
-    @Dependency
     private FileCommandSettings settings;
 
     @Subcommand("file")
@@ -51,25 +48,25 @@ public class MusicFileCommand {
             try {
                 long fileSize = Files.size(path);
                 if (settings.getSizeLimit() > 0 && fileSize > settings.getSizeLimit()) {
-                    player.sendMessage(config.getMessages().getMessage("invalid-size"));
+                    player.sendMessage(plugin.getPluginConfig().getMessages().getMessage("invalid-size"));
                     return;
                 }
-                InputStream fileStream = new BufferedInputStream(createProgressStream(Files.newInputStream(path), Files.size(path), player));
-                Optional<ISoundFormat> optionalSoundFormat =
-                        plugin.getSoundFormatHolder().findFirstByPredicate(format -> format.isSupported(file, fileStream));
-                if (!optionalSoundFormat.isPresent()) {
-                    player.sendMessage(config.getMessages().getMessage("cannot-create-sound"));
-                    fileStream.close();
-                    return;
-                }
-                ISoundFormat soundFormat = optionalSoundFormat.get();
 
                 PlasmoVoiceSoundPlayer soundPlayer = plugin.getPlasmoVoiceSoundPlayer(player.getUniqueId());
-                soundPlayer.playSound(soundFormat.newSoundFactory().createSound(file, fileStream),
-                        IPlasmoVoiceSoundController.of(soundFormat, distance.getValue(soundFormat.getSettings().getDistance())));
+                InputStream fileStream = new BufferedInputStream(createProgressStream(Files.newInputStream(path), Files.size(path), player));
+                Optional<PlasmoVoiceSoundPlaySession> soundPlaySession = soundPlayer.playSound(file, fileStream);
+                if (!soundPlaySession.isPresent()) {
+                    player.sendMessage(plugin.getPluginConfig().getMessages().getMessage("cannot-create-sound"));
+                    return;
+                }
+                soundPlaySession.ifPresent(session -> {
+                    session.getSoundController()
+                            .setDistance(distance.getValue(session.getSound().getSoundFormat().getSettings().getDistance()));
+                    session.playSound();
+                });
                 fileStream.close();
             } catch(IOException e) {
-                player.sendMessage(config.getMessages().getMessage("error-occurred"));
+                player.sendMessage(plugin.getPluginConfig().getMessages().getMessage("error-occurred"));
                 e.printStackTrace();
             }
         });
