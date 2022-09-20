@@ -65,6 +65,8 @@ public class PlasmoVoiceAddon extends JavaPlugin {
     }
 
     public PlasmoVoiceSoundPlayer getPlasmoVoiceSoundPlayer(UUID uuid, Supplier<IPlayerAudioSource> defaultAudioSource) {
-        return playerSoundPlayers.getOrDefault(uuid, new PlasmoVoiceSoundPlayer(defaultAudioSource.get()));
+        if (!playerSoundPlayers.containsKey(uuid))
+            playerSoundPlayers.put(uuid, new PlasmoVoiceSoundPlayer(defaultAudioSource.get()));
+        return playerSoundPlayers.get(uuid);
     }
 }
