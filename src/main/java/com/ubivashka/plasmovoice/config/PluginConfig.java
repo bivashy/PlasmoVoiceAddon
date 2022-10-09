@@ -12,6 +12,7 @@ import com.ubivashka.configuration.annotation.ConfigField;
 import com.ubivashka.plasmovoice.PlasmoVoiceAddon;
 import com.ubivashka.plasmovoice.config.bossbar.BossbarConfiguration;
 import com.ubivashka.plasmovoice.config.resolver.OptionalConfigurationFieldResolver;
+import com.ubivashka.plasmovoice.config.settings.CachingSettings;
 import com.ubivashka.plasmovoice.config.settings.MusicCommandSettings;
 import com.ubivashka.plasmovoice.config.settings.MusicPlayerSettings;
 
@@ -19,7 +20,8 @@ public class PluginConfig {
     private static final PlasmoVoiceAddon PLUGIN = PlasmoVoiceAddon.getPlugin(PlasmoVoiceAddon.class);
     public static final ConfigurationProcessor CONFIGURATION_PROCESSOR = new BukkitConfigurationProcessor().registerFieldResolverFactory(Optional.class,
                     new OptionalConfigurationFieldResolver())
-            .registerFieldResolver(File.class, context -> new File(context.getString(PLUGIN.getDataFolder().getAbsolutePath())));
+            .registerFieldResolver(File.class, context -> new File(
+                    context.getString(PLUGIN.getDataFolder().getAbsolutePath()).replaceAll("%data_folder%", PLUGIN.getDataFolder().getAbsolutePath())));
     private final Configuration config;
     @ConfigField({"music-player-settings", "WAV"})
     private MusicPlayerSettings wavMusicPlayerSettings = new MusicPlayerSettings();
@@ -29,6 +31,8 @@ public class PluginConfig {
     private MusicCommandSettings musicCommandSettings = new MusicCommandSettings();
     @ConfigField("progress-boss-bar")
     private BossbarConfiguration bossbarConfiguration = new BossbarConfiguration();
+    @ConfigField("caching")
+    private CachingSettings cachingSettings = new CachingSettings();
     @ConfigField("messages")
     private Messages messages = new Messages();
 
@@ -61,5 +65,9 @@ public class PluginConfig {
 
     public BossbarConfiguration getBossbarConfiguration() {
         return bossbarConfiguration;
+    }
+
+    public CachingSettings getCachingSettings() {
+        return cachingSettings;
     }
 }

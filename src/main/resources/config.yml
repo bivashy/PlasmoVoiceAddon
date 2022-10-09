@@ -28,8 +28,6 @@ music-command-settings:
     # Some url audio can have undefined size, for example audio streams.
     # If this value will be true, plugin will block url audio with undefined sizes
     block-undefined-size: false
-    caching:
-      enabled: true
 
   file:
     enabled: true
@@ -43,6 +41,13 @@ music-command-settings:
     # Size is provided in bytes.
     # Use -1 for disabling size limit
     size-limit: -1
+caching:
+  # Plugin will not cache sound with more or equals size of bytes
+  size-limit: -1
+  # Some links have undefined size of audio
+  block-undefined-size: false
+  # Where save cached sounds
+  #cache-folder: '%data_folder%/caches'
 messages:
   not-enough-permission: '&cYou are not allowed to execute this command!' # Also occurs when player tries to change sound distance
   player-not-found: 'Player not found!'

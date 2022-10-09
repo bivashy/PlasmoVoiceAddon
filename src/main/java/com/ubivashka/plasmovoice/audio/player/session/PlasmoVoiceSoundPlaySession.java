@@ -51,6 +51,8 @@ public class PlasmoVoiceSoundPlaySession implements ISoundPlaySession {
                     return;
 
                 byte[] data = frameProvider.getFrame(i).getData();
+                if (data.length == 0)
+                    return;
                 int distance = soundController.getDistance();
                 if (!soundController.isPlaying()) {
                     end();
@@ -116,6 +118,7 @@ public class PlasmoVoiceSoundPlaySession implements ISoundPlaySession {
         return ended;
     }
 
+    @Override
     public ISound getSound() {
         return sound;
     }

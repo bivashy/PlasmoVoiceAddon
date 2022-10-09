@@ -5,27 +5,26 @@ import org.bukkit.event.HandlerList;
 
 import com.ubivashka.plasmovoice.audio.player.controller.ISoundController;
 import com.ubivashka.plasmovoice.audio.player.session.ISoundPlaySession;
-import com.ubivashka.plasmovoice.event.SoundPreResolveEvent.SoundResolveModel;
 import com.ubivashka.plasmovoice.sound.ISoundFormat;
 
-public class SoundPlayEvent extends Event {
+public class SoundPlayEvent<T> extends Event {
     private static final HandlerList HANDLERS = new HandlerList();
-    private final SoundResolveModel resolveModel;
+    private final SoundEventModel<T> soundEventModel;
     private final ISoundFormat soundFormat;
     private final ISoundController soundController;
     private final ISoundPlaySession soundPlaySession;
 
-    public SoundPlayEvent(SoundResolveModel resolveModel, ISoundFormat soundFormat, ISoundController soundController,
+    public SoundPlayEvent(SoundEventModel<T> soundEventModel, ISoundFormat soundFormat, ISoundController soundController,
             ISoundPlaySession soundPlaySession) {
         super(true);
-        this.resolveModel = resolveModel;
+        this.soundEventModel = soundEventModel;
         this.soundFormat = soundFormat;
         this.soundController = soundController;
         this.soundPlaySession = soundPlaySession;
     }
 
-    public SoundResolveModel getResolveModel() {
-        return resolveModel;
+    public SoundEventModel<T> getSoundEventModel() {
+        return soundEventModel;
     }
 
     public ISoundFormat getSoundFormat() {
