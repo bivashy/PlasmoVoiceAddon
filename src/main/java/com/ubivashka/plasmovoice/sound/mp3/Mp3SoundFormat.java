@@ -19,6 +19,7 @@ import javazoom.spi.mpeg.sampled.file.MpegAudioFileReader;
 
 public class Mp3SoundFormat implements ISoundFormat {
     private static final PlasmoVoiceAddon PLUGIN = PlasmoVoiceAddon.getPlugin(PlasmoVoiceAddon.class);
+    private static final String FORMAT_NAME = "MP3";
     private static final MpegAudioFileReader MPEG_AUDIO_FILE_READER = new MpegAudioFileReader();
 
     @Override
@@ -39,6 +40,11 @@ public class Mp3SoundFormat implements ISoundFormat {
     @Override
     public ISoundFactory newSoundFactory() {
         return new Mp3SoundFactory(this);
+    }
+
+    @Override
+    public String getName() {
+        return FORMAT_NAME;
     }
 
     public static class Mp3SoundFactory extends AbstractSoundFactory {

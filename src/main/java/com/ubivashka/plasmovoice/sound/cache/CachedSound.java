@@ -20,4 +20,9 @@ public class CachedSound {
     public String getCachedFile() {
         return cachedFile;
     }
+
+    @Override
+    public String toString() {
+        return cachedFile;
+    }
 }

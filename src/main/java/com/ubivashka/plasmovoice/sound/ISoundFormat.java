@@ -23,4 +23,6 @@ public interface ISoundFormat {
     MusicPlayerSettings getSettings();
 
     ISoundFactory newSoundFactory();
+
+    String getName();
 }

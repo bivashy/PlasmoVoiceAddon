@@ -11,6 +11,7 @@ public class SoundCreateEvent<T> extends Event {
     private ISound sound;
 
     public SoundCreateEvent(SoundEventModel<T> soundEventModel, ISound sound) {
+        super(true);
         this.soundEventModel = soundEventModel;
         this.sound = sound;
     }

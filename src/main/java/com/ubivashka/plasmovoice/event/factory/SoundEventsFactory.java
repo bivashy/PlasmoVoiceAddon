@@ -18,13 +18,14 @@ import com.ubivashka.plasmovoice.event.file.FileSoundPlayEvent;
 import com.ubivashka.plasmovoice.event.file.FileSoundPrePlayEvent;
 import com.ubivashka.plasmovoice.event.file.FileSoundPreResolveEvent;
 import com.ubivashka.plasmovoice.event.url.URLSoundCreateEvent;
+import com.ubivashka.plasmovoice.event.url.URLSoundPlayEvent;
 import com.ubivashka.plasmovoice.event.url.URLSoundPrePlayEvent;
 import com.ubivashka.plasmovoice.event.url.URLSoundPreResolveEvent;
 import com.ubivashka.plasmovoice.sound.ISound;
 import com.ubivashka.plasmovoice.sound.ISoundFormat;
 
 public interface SoundEventsFactory<T> {
-    SoundEventsFactory<URL> URL_FACTORY = new SoundEventsFactory<URL>() {
+    SoundEventsFactory<URL> URL_FACTORY = new SoundEventsFactory<>() {
         private final PlasmoVoiceAddon PLUGIN = PlasmoVoiceAddon.getPlugin(PlasmoVoiceAddon.class);
 
         @Override
@@ -53,10 +54,10 @@ public interface SoundEventsFactory<T> {
         @Override
         public SoundPlayEvent<URL> createSoundPlayEvent(SoundEventModel<URL> soundEventModel, ISoundFormat soundFormat,
                 IPlasmoVoiceSoundController soundController, PlasmoVoiceSoundPlaySession soundPlaySession) {
-            return null;
+            return new URLSoundPlayEvent(soundEventModel, soundFormat, soundController, soundPlaySession);
         }
     };
-    SoundEventsFactory<File> FILE_FACTORY = new SoundEventsFactory<File>() {
+    SoundEventsFactory<File> FILE_FACTORY = new SoundEventsFactory<>() {
         private final PlasmoVoiceAddon PLUGIN = PlasmoVoiceAddon.getPlugin(PlasmoVoiceAddon.class);
 
         @Override

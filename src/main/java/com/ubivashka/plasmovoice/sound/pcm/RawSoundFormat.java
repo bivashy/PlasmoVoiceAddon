@@ -15,6 +15,7 @@ import com.ubivashka.plasmovoice.sound.ISoundFormat;
 
 public class RawSoundFormat implements ISoundFormat {
     private static final PlasmoVoiceAddon PLUGIN = PlasmoVoiceAddon.getPlugin(PlasmoVoiceAddon.class);
+    private static final String FORMAT_NAME = "RAW";
 
     @Override
     public boolean isSupported(InputStream audioStream) {
@@ -34,6 +35,11 @@ public class RawSoundFormat implements ISoundFormat {
     @Override
     public MusicPlayerSettings getSettings() {
         return PLUGIN.getPluginConfig().getWavMusicPlayerSettings();
+    }
+
+    @Override
+    public String getName() {
+        return FORMAT_NAME;
     }
 
     public static class RawSoundFactory extends AbstractSoundFactory {

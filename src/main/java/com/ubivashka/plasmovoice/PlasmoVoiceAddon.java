@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Supplier;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.ubivashka.plasmovoice.audio.player.PlasmoVoiceSoundPlayer;
@@ -13,6 +14,7 @@ import com.ubivashka.plasmovoice.audio.sources.IPlayerAudioSource;
 import com.ubivashka.plasmovoice.audio.sources.PlayerAudioSource;
 import com.ubivashka.plasmovoice.commands.CommandRegistry;
 import com.ubivashka.plasmovoice.config.PluginConfig;
+import com.ubivashka.plasmovoice.listener.CacheListener;
 import com.ubivashka.plasmovoice.sound.holder.SoundFormatHolder;
 import com.ubivashka.plasmovoice.sound.holder.json.CachedSoundJsonHolder;
 import com.ubivashka.plasmovoice.sound.mp3.Mp3SoundFormat;
@@ -31,6 +33,7 @@ public class PlasmoVoiceAddon extends JavaPlugin {
 
         soundFormatHolder.add(new RawSoundFormat()).add(new Mp3SoundFormat());
         cachedSoundHolder = new CachedSoundJsonHolder(this);
+        Bukkit.getPluginManager().registerEvents(new CacheListener(this), this);
     }
 
     @Override
