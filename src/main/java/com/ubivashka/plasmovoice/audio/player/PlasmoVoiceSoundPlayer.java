@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -12,7 +14,6 @@ import org.bukkit.Bukkit;
 import com.ubivashka.plasmovoice.audio.player.controller.IPlasmoVoiceSoundController;
 import com.ubivashka.plasmovoice.audio.player.controller.ISoundController;
 import com.ubivashka.plasmovoice.audio.player.session.PlasmoVoiceSoundPlaySession;
-import com.ubivashka.plasmovoice.audio.sources.IAudioSource;
 import com.ubivashka.plasmovoice.audio.sources.IPlayerAudioSource;
 import com.ubivashka.plasmovoice.audio.sources.PlayerAudioSource;
 import com.ubivashka.plasmovoice.event.SoundEventModel;
@@ -22,6 +23,7 @@ import com.ubivashka.plasmovoice.sound.ISound;
 import com.ubivashka.plasmovoice.sound.ISoundFormat;
 
 public class PlasmoVoiceSoundPlayer implements ISoundPlayer {
+    private final Deque<PlasmoVoiceSoundPlaySession> sessionsDeque = new ArrayDeque<>();
     private final IPlayerAudioSource playerAudioSource;
 
     public PlasmoVoiceSoundPlayer(IPlayerAudioSource playerAudioSource) {
@@ -36,7 +38,12 @@ public class PlasmoVoiceSoundPlayer implements ISoundPlayer {
     public PlasmoVoiceSoundPlaySession playSound(ISound sound, ISoundController soundController) {
         if (!(soundController instanceof IPlasmoVoiceSoundController))
             return null;
-        PlasmoVoiceSoundPlaySession soundPlaySession = new PlasmoVoiceSoundPlaySession(sound, playerAudioSource, (IPlasmoVoiceSoundController) soundController);
+        PlasmoVoiceSoundPlaySession soundPlaySession = new PlasmoVoiceSoundPlaySession(sound, this, (IPlasmoVoiceSoundController) soundController);
+        if (!playerAudioSource.getLastSession().isEnded()) {
+            sessionsDeque.add(soundPlaySession);
+            return soundPlaySession;
+        }
+        soundPlaySession.playSound();
         playerAudioSource.setLastSession(soundPlaySession);
         return soundPlaySession;
     }
@@ -71,7 +78,29 @@ public class PlasmoVoiceSoundPlayer implements ISoundPlayer {
     }
 
     @Override
-    public IAudioSource getSource() {
+    public IPlayerAudioSource getSource() {
         return playerAudioSource;
+    }
+
+    public boolean tryPlayNextSound() {
+        if (playerAudioSource.getLastSession()==null || !playerAudioSource.getLastSession().isEnded())
+            return false;
+        PlasmoVoiceSoundPlaySession session = sessionsDeque.pollFirst();
+        if (session == null)
+            return false;
+        playerAudioSource.setLastSession(session);
+        session.playSound();
+        return true;
+    }
+
+    public boolean forceNextSound() {
+        if(playerAudioSource.getLastSession()!=null)
+            playerAudioSource.getLastSession().end();
+        PlasmoVoiceSoundPlaySession session = sessionsDeque.pollFirst();
+        if (session == null)
+            return false;
+        playerAudioSource.setLastSession(session);
+        session.playSound();
+        return true;
     }
 }

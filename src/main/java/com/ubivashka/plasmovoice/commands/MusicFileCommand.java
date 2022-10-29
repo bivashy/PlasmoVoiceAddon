@@ -58,11 +58,8 @@ public class MusicFileCommand {
                     player.sendMessage(plugin.getPluginConfig().getMessages().getMessage("cannot-create-sound"));
                     return;
                 }
-                soundPlaySession.ifPresent(session -> {
-                    session.getSoundController()
-                            .setDistance(distance.getValue(session.getSound().getSoundFormat().getSettings().getDistance()));
-                    session.playSound();
-                });
+                soundPlaySession.ifPresent(session -> session.getSoundController()
+                        .setDistance(distance.getValue(session.getSound().getSoundFormat().getSettings().getDistance())));
                 fileStream.close();
             } catch(IOException e) {
                 player.sendMessage(plugin.getPluginConfig().getMessages().getMessage("error-occurred"));

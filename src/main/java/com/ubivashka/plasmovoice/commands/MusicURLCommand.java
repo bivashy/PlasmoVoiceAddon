@@ -62,11 +62,8 @@ public class MusicURLCommand {
                     return;
                 }
 
-                soundPlaySession.ifPresent(session -> {
-                    session.getSoundController()
-                            .setDistance(distance.getValue(session.getSound().getSoundFormat().getSettings().getDistance()));
-                    session.playSound();
-                });
+                soundPlaySession.ifPresent(session -> session.getSoundController()
+                        .setDistance(distance.getValue(session.getSound().getSoundFormat().getSettings().getDistance())));
                 urlStream.close();
             } catch(IOException e) {
                 player.sendMessage(plugin.getPluginConfig().getMessages().getMessage("error-occurred"));
