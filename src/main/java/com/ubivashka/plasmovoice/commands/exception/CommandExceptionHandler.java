@@ -25,7 +25,7 @@ public class CommandExceptionHandler extends BukkitExceptionAdapter {
 
     @Override
     public void invalidPlayer(CommandActor actor, InvalidPlayerException exception) {
-
+        actor.reply(config.getMessages().getMessage("player-not-found"));
     }
 
     @Override
