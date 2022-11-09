@@ -1,5 +1,6 @@
 package com.ubivashka.plasmovoice.audio.sources;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -14,7 +15,7 @@ import com.ubivashka.plasmovoice.sound.ISound;
 public class PlayerAudioSource implements IPlayerAudioSource {
     private static final PlasmoVoiceAddon PLUGIN = PlasmoVoiceAddon.getPlugin(PlasmoVoiceAddon.class);
     private final UUID playerUniqueId;
-    private ISoundPlaySession lastSession;
+    private ISoundPlaySession currentSession;
 
     public PlayerAudioSource(UUID playerUniqueId) {
         this.playerUniqueId = playerUniqueId;
@@ -36,17 +37,17 @@ public class PlayerAudioSource implements IPlayerAudioSource {
 
     @Override
     public ISoundPlaySession sendAudioData(ISound sound, ISoundController soundController) {
-        lastSession = PLUGIN.getPlasmoVoiceSoundPlayer(playerUniqueId).playSound(sound, soundController);
-        return lastSession;
+        currentSession = PLUGIN.getPlasmoVoiceSoundPlayer(playerUniqueId).playSound(sound, soundController);
+        return currentSession;
     }
 
     @Override
-    public ISoundPlaySession getLastSession() {
-        return lastSession;
+    public Optional<ISoundPlaySession> getCurrentSession() {
+        return Optional.ofNullable(currentSession);
     }
 
     @Override
-    public void setLastSession(ISoundPlaySession lastSession) {
-        this.lastSession = lastSession;
+    public void setCurrentSession(ISoundPlaySession lastSession) {
+        this.currentSession = lastSession;
     }
 }

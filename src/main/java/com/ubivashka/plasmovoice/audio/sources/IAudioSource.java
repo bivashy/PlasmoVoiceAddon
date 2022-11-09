@@ -1,5 +1,7 @@
 package com.ubivashka.plasmovoice.audio.sources;
 
+import java.util.Optional;
+
 import com.ubivashka.plasmovoice.audio.player.controller.ISoundController;
 import com.ubivashka.plasmovoice.audio.player.session.ISoundPlaySession;
 import com.ubivashka.plasmovoice.sound.ISound;
@@ -19,12 +21,12 @@ public interface IAudioSource {
      *
      * @return Last sent session, may be null.
      */
-    ISoundPlaySession getLastSession();
+    Optional<ISoundPlaySession> getCurrentSession();
 
     /**
      * Set last session. Mostly required for ISoundPlayer.
      *
      * @param lastSession new last session
      */
-    void setLastSession(ISoundPlaySession lastSession);
+    void setCurrentSession(ISoundPlaySession lastSession);
 }
