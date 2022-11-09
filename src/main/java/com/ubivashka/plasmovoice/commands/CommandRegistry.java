@@ -5,6 +5,7 @@ import java.io.File;
 import org.bukkit.entity.Player;
 
 import com.ubivashka.plasmovoice.PlasmoVoiceAddon;
+import com.ubivashka.plasmovoice.audio.player.PlasmoVoiceSoundPlayer;
 import com.ubivashka.plasmovoice.commands.annotations.PluginsFolder;
 import com.ubivashka.plasmovoice.commands.argument.SoundDistance;
 import com.ubivashka.plasmovoice.commands.exception.CommandExceptionHandler;
@@ -31,6 +32,7 @@ public class CommandRegistry {
     private void register(PlasmoVoiceAddon plugin) {
         commandHandler.setExceptionHandler(new CommandExceptionHandler(plugin.getPluginConfig()));
         commandHandler.registerExceptionHandler(SendMessageWithKeyException.class, (actor, e) -> e.sendTo(actor));
+        commandHandler.registerContextResolver(PlasmoVoiceSoundPlayer.class, context -> plugin.getPlasmoVoiceSoundPlayer(context.actor().getUniqueId()));
 
         commandHandler.registerValueResolver(SoundDistance.class, context -> {
             int distance = context.popInt();
@@ -63,7 +65,7 @@ public class CommandRegistry {
     }
 
     private void registerCommands() {
-        commandHandler.register(new MusicReloadCommand(), new MusicFileCommand(), new MusicURLCommand());
+        commandHandler.register(new MusicReloadCommand(), new MusicFileCommand(), new MusicURLCommand(), new MusicControlCommand());
     }
 }
 

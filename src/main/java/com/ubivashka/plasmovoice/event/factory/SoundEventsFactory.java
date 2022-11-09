@@ -25,7 +25,7 @@ import com.ubivashka.plasmovoice.sound.ISound;
 import com.ubivashka.plasmovoice.sound.ISoundFormat;
 
 public interface SoundEventsFactory<T> {
-    SoundEventsFactory<URL> URL_FACTORY = new SoundEventsFactory<>() {
+    SoundEventsFactory<URL> URL_FACTORY = new SoundEventsFactory<URL>() {
         private final PlasmoVoiceAddon PLUGIN = PlasmoVoiceAddon.getPlugin(PlasmoVoiceAddon.class);
 
         @Override
@@ -57,7 +57,7 @@ public interface SoundEventsFactory<T> {
             return new URLSoundPlayEvent(soundEventModel, soundFormat, soundController, soundPlaySession);
         }
     };
-    SoundEventsFactory<File> FILE_FACTORY = new SoundEventsFactory<>() {
+    SoundEventsFactory<File> FILE_FACTORY = new SoundEventsFactory<File>() {
         private final PlasmoVoiceAddon PLUGIN = PlasmoVoiceAddon.getPlugin(PlasmoVoiceAddon.class);
 
         @Override

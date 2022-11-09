@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayDeque;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.Optional;
 import java.util.UUID;
@@ -13,6 +15,7 @@ import org.bukkit.Bukkit;
 
 import com.ubivashka.plasmovoice.audio.player.controller.IPlasmoVoiceSoundController;
 import com.ubivashka.plasmovoice.audio.player.controller.ISoundController;
+import com.ubivashka.plasmovoice.audio.player.session.ISoundPlaySession;
 import com.ubivashka.plasmovoice.audio.player.session.PlasmoVoiceSoundPlaySession;
 import com.ubivashka.plasmovoice.audio.sources.IPlayerAudioSource;
 import com.ubivashka.plasmovoice.audio.sources.PlayerAudioSource;
@@ -39,12 +42,12 @@ public class PlasmoVoiceSoundPlayer implements ISoundPlayer {
         if (!(soundController instanceof IPlasmoVoiceSoundController))
             return null;
         PlasmoVoiceSoundPlaySession soundPlaySession = new PlasmoVoiceSoundPlaySession(sound, this, (IPlasmoVoiceSoundController) soundController);
-        if (!playerAudioSource.getLastSession().isEnded()) {
+        if (!playerAudioSource.getCurrentSession().map(ISoundPlaySession::isEnded).orElse(true)) {
             sessionsDeque.add(soundPlaySession);
             return soundPlaySession;
         }
         soundPlaySession.playSound();
-        playerAudioSource.setLastSession(soundPlaySession);
+        playerAudioSource.setCurrentSession(soundPlaySession);
         return soundPlaySession;
     }
 
@@ -82,24 +85,27 @@ public class PlasmoVoiceSoundPlayer implements ISoundPlayer {
         return playerAudioSource;
     }
 
+    public Collection<PlasmoVoiceSoundPlaySession> getSessions() {
+        return Collections.unmodifiableCollection(sessionsDeque);
+    }
+
     public boolean tryPlayNextSound() {
-        if (playerAudioSource.getLastSession()==null || !playerAudioSource.getLastSession().isEnded())
+        if (!playerAudioSource.getCurrentSession().map(ISoundPlaySession::isEnded).orElse(true))
             return false;
         PlasmoVoiceSoundPlaySession session = sessionsDeque.pollFirst();
         if (session == null)
             return false;
-        playerAudioSource.setLastSession(session);
+        playerAudioSource.setCurrentSession(session);
         session.playSound();
         return true;
     }
 
     public boolean forceNextSound() {
-        if(playerAudioSource.getLastSession()!=null)
-            playerAudioSource.getLastSession().end();
+        playerAudioSource.getCurrentSession().ifPresent(ISoundPlaySession::end);
         PlasmoVoiceSoundPlaySession session = sessionsDeque.pollFirst();
         if (session == null)
             return false;
-        playerAudioSource.setLastSession(session);
+        playerAudioSource.setCurrentSession(session);
         session.playSound();
         return true;
     }

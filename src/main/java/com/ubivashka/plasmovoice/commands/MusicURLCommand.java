@@ -35,9 +35,9 @@ public class MusicURLCommand {
     private UrlCommandSettings settings;
 
     @Subcommand("url")
-    public void executeUrlSubcommand(Player player, URL musicUrl, @Default("-1") @Flag("distance") SoundDistance distance) {
+    public void executeUrlSubcommand(Player player, PlasmoVoiceSoundPlayer soundPlayer, URL musicUrl, @Default("-1") @Flag("distance") SoundDistance distance) {
         if (!settings.isEnabled())
-            throw new SendMessageWithKeyException("url-command-disabled");
+        throw new SendMessageWithKeyException("url-command-disabled");
         if (settings.getPermission().isPresent() && !player.hasPermission(settings.getPermission().get()))
             throw new SendMessageWithKeyException("not-enough-permission");
         if (!settings.getWhitelistSchemes().contains(musicUrl.getProtocol()))
@@ -54,7 +54,6 @@ public class MusicURLCommand {
                     return;
                 }
 
-                PlasmoVoiceSoundPlayer soundPlayer = plugin.getPlasmoVoiceSoundPlayer(player.getUniqueId());
                 InputStream urlStream = new BufferedInputStream(createProgressStream(connection.getInputStream(), connection.getContentLength(), player));
                 Optional<PlasmoVoiceSoundPlaySession> soundPlaySession = soundPlayer.playSound(musicUrl, urlStream);
                 if (!soundPlaySession.isPresent()) {
@@ -74,19 +73,21 @@ public class MusicURLCommand {
 
     @Subcommand("force url")
     @CommandPermission("plasmo.addon.url")
-    public void executeUrlSubcommand(BukkitCommandActor actor, Player player, URL musicUrl, @Default("-1") @Flag("distance") SoundDistance distance) {
-        executeUrlSubcommand(player, musicUrl, distance);
+    public void executeUrlSubcommand(BukkitCommandActor actor, Player player, PlasmoVoiceSoundPlayer soundPlayer, URL musicUrl,
+            @Default("-1") @Flag("distance") SoundDistance distance) {
+        executeUrlSubcommand(player, soundPlayer, musicUrl, distance);
     }
 
     @Command("musicurl")
-    public void executeUrlCommand(Player player, URL musicUrl, @Default("-1") @Flag("distance") SoundDistance distance) {
-        executeUrlSubcommand(player, musicUrl, distance);
+    public void executeUrlCommand(Player player, PlasmoVoiceSoundPlayer soundPlayer, URL musicUrl, @Default("-1") @Flag("distance") SoundDistance distance) {
+        executeUrlSubcommand(player, soundPlayer, musicUrl, distance);
     }
 
     @Command("musicforceurl")
     @CommandPermission("plasmo.addon.url")
-    public void executeUrlCommand(BukkitCommandActor actor, Player player, URL musicUrl, @Default("-1") @Flag("distance") SoundDistance distance) {
-        executeUrlSubcommand(player, musicUrl, distance);
+    public void executeUrlCommand(BukkitCommandActor actor, Player player, PlasmoVoiceSoundPlayer soundPlayer, URL musicUrl,
+            @Default("-1") @Flag("distance") SoundDistance distance) {
+        executeUrlSubcommand(player, soundPlayer, musicUrl, distance);
     }
 
     private InputStream createProgressStream(InputStream stream, long contentSize, Player player) {

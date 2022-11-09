@@ -37,7 +37,8 @@ public class MusicFileCommand {
     private FileCommandSettings settings;
 
     @Subcommand("file")
-    public void executeFileSubcommand(Player player, @PluginsFolder File file, @Default("-1") @Flag("distance") SoundDistance distance) {
+    public void executeFileSubcommand(Player player, PlasmoVoiceSoundPlayer soundPlayer, @PluginsFolder File file,
+            @Default("-1") @Flag("distance") SoundDistance distance) {
         if (!settings.isEnabled())
             throw new SendMessageWithKeyException("file-command-disabled");
         if (settings.getPermission().isPresent() && !player.hasPermission(settings.getPermission().get()))
@@ -51,7 +52,6 @@ public class MusicFileCommand {
                     return;
                 }
 
-                PlasmoVoiceSoundPlayer soundPlayer = plugin.getPlasmoVoiceSoundPlayer(player.getUniqueId());
                 InputStream fileStream = new BufferedInputStream(createProgressStream(Files.newInputStream(path), Files.size(path), player));
                 Optional<PlasmoVoiceSoundPlaySession> soundPlaySession = soundPlayer.playSound(file, fileStream);
                 if (!soundPlaySession.isPresent()) {
@@ -70,21 +70,22 @@ public class MusicFileCommand {
 
     @Subcommand("force file")
     @CommandPermission("plasmo.addon.file")
-    public void executeFileSubcommand(BukkitCommandActor actor, Player player, @PluginsFolder File file,
+    public void executeFileSubcommand(BukkitCommandActor actor, Player player, PlasmoVoiceSoundPlayer soundPlayer, @PluginsFolder File file,
             @Default("-1") @Flag("distance") SoundDistance distance) {
-        executeFileSubcommand(player, file, distance);
+        executeFileSubcommand(player, soundPlayer, file, distance);
     }
 
     @Command("musicfile")
-    public void executeFileCommand(Player player, @PluginsFolder File file,
+    public void executeFileCommand(Player player, PlasmoVoiceSoundPlayer soundPlayer, @PluginsFolder File file,
             @CommandPermission("plasmo.addon.distnace") @Default("-1") @Flag("distance") SoundDistance distance) {
-        executeFileSubcommand(player, file, distance);
+        executeFileSubcommand(player, soundPlayer, file, distance);
     }
 
     @Command("musicforcefile")
     @CommandPermission("plasmo.addon.file")
-    public void executeFileCommand(BukkitCommandActor actor, Player player, @PluginsFolder File file, @Default("-1") @Flag("distance") SoundDistance distance) {
-        executeFileSubcommand(player, file, distance);
+    public void executeFileCommand(BukkitCommandActor actor, Player player, PlasmoVoiceSoundPlayer soundPlayer, @PluginsFolder File file,
+            @Default("-1") @Flag("distance") SoundDistance distance) {
+        executeFileSubcommand(player, soundPlayer, file, distance);
     }
 
     private InputStream createProgressStream(InputStream stream, long contentSize, Player player) {

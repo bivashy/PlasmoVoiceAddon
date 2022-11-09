@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import com.ubivashka.plasmovoice.PlasmoVoiceAddon;
 import com.ubivashka.plasmovoice.audio.player.PlasmoVoiceSoundPlayer;
 import com.ubivashka.plasmovoice.audio.player.controller.IPlasmoVoiceSoundController;
 import com.ubivashka.plasmovoice.event.SoundSessionEndEvent;
@@ -124,7 +125,8 @@ public class PlasmoVoiceSoundPlaySession implements ISoundPlaySession {
     public void end() {
         ended = true;
         task.cancel();
-        Bukkit.getPluginManager().callEvent(new SoundSessionEndEvent(PlasmoVoiceSoundPlaySession.this));
+        Bukkit.getScheduler()
+                .runTask(PlasmoVoiceAddon.getPlugin(PlasmoVoiceAddon.class), () -> Bukkit.getPluginManager().callEvent(new SoundSessionEndEvent(this)));
         if (player == null || !player.isOnline())
             return;
         VoiceEndServerPacket endServerPacket = new VoiceEndServerPacket(soundPlayer.getSource().getPlayerUniqueId());
