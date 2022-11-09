@@ -14,11 +14,15 @@ import com.ubivashka.plasmovoice.event.SoundPlayEvent;
 import com.ubivashka.plasmovoice.event.SoundPrePlayEvent;
 import com.ubivashka.plasmovoice.event.SoundPreResolveEvent;
 import com.ubivashka.plasmovoice.event.file.FileSoundCreateEvent;
+import com.ubivashka.plasmovoice.event.file.FileSoundFormatPreCreateEvent;
 import com.ubivashka.plasmovoice.event.file.FileSoundPlayEvent;
+import com.ubivashka.plasmovoice.event.file.FileSoundPreCreateEvent;
 import com.ubivashka.plasmovoice.event.file.FileSoundPrePlayEvent;
 import com.ubivashka.plasmovoice.event.file.FileSoundPreResolveEvent;
 import com.ubivashka.plasmovoice.event.url.URLSoundCreateEvent;
+import com.ubivashka.plasmovoice.event.url.URLSoundFormatPreCreateEvent;
 import com.ubivashka.plasmovoice.event.url.URLSoundPlayEvent;
+import com.ubivashka.plasmovoice.event.url.URLSoundPreCreateEvent;
 import com.ubivashka.plasmovoice.event.url.URLSoundPrePlayEvent;
 import com.ubivashka.plasmovoice.event.url.URLSoundPreResolveEvent;
 import com.ubivashka.plasmovoice.sound.ISound;
@@ -35,6 +39,10 @@ public interface SoundEventsFactory<T> {
 
         @Override
         public Optional<ISoundFormat> createSoundFormat(SoundEventModel<URL> soundEventModel) {
+            URLSoundFormatPreCreateEvent soundFormatPreCreateEvent = new URLSoundFormatPreCreateEvent(soundEventModel);
+            Bukkit.getPluginManager().callEvent(soundFormatPreCreateEvent);
+            if (soundFormatPreCreateEvent.getSoundFormat() != null)
+                return Optional.of(soundFormatPreCreateEvent.getSoundFormat());
             return PLUGIN.getSoundFormatHolder().findFirstFormat(soundEventModel.getSource(), soundEventModel.getInputStream());
         }
 
@@ -45,6 +53,10 @@ public interface SoundEventsFactory<T> {
 
         @Override
         public ISound createSound(ISoundFormat soundFormat, SoundEventModel<URL> soundEventModel) {
+            URLSoundPreCreateEvent soundPreCreateEvent = new URLSoundPreCreateEvent(soundEventModel);
+            Bukkit.getPluginManager().callEvent(soundPreCreateEvent);
+            if (soundPreCreateEvent.getSound() != null)
+                return soundPreCreateEvent.getSound();
             ISound sound = soundFormat.newSoundFactory().createSound(soundEventModel.getSource(), soundEventModel.getInputStream());
             URLSoundCreateEvent soundCreateEvent = new URLSoundCreateEvent(soundEventModel, sound);
             Bukkit.getPluginManager().callEvent(soundCreateEvent);
@@ -67,6 +79,10 @@ public interface SoundEventsFactory<T> {
 
         @Override
         public Optional<ISoundFormat> createSoundFormat(SoundEventModel<File> soundEventModel) {
+            FileSoundFormatPreCreateEvent soundFormatPreCreateEvent = new FileSoundFormatPreCreateEvent(soundEventModel);
+            Bukkit.getPluginManager().callEvent(soundFormatPreCreateEvent);
+            if (soundFormatPreCreateEvent.getSoundFormat() != null)
+                return Optional.of(soundFormatPreCreateEvent.getSoundFormat());
             return PLUGIN.getSoundFormatHolder().findFirstFormat(soundEventModel.getSource(), soundEventModel.getInputStream());
         }
 
@@ -77,6 +93,10 @@ public interface SoundEventsFactory<T> {
 
         @Override
         public ISound createSound(ISoundFormat soundFormat, SoundEventModel<File> soundEventModel) {
+            FileSoundPreCreateEvent soundPreCreateEvent = new FileSoundPreCreateEvent(soundEventModel);
+            Bukkit.getPluginManager().callEvent(soundPreCreateEvent);
+            if (soundPreCreateEvent.getSound() != null)
+                return soundPreCreateEvent.getSound();
             ISound sound = soundFormat.newSoundFactory().createSound(soundEventModel.getSource(), soundEventModel.getInputStream());
             FileSoundCreateEvent soundCreateEvent = new FileSoundCreateEvent(soundEventModel, sound);
             Bukkit.getPluginManager().callEvent(soundCreateEvent);
