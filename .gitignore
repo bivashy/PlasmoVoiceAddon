@@ -3,3 +3,7 @@
 /bin/
 /target/
 /.settings
+*.eml
+*.iml
+/.idea
+
