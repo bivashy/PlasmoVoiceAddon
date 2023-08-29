@@ -52,93 +52,99 @@ URL url = //Your music url
 InputStream inputStream = new BufferedInputStream(url.openStream());
 ```
 2. Find right `ISoundFormat` for `InputStream`
+
 ```java
-import com.ubivashka.plasmovoice.PlasmoVoiceAddon;
-import com.ubivashka.plasmovoice.sound.ISoundFormat;
-import java.util.Optional;
+import com.bivashy.plasmovoice.PlasmoVoiceAddon;
+import com.bivashy.plasmovoice.sound.ISoundFormat;
 
 PlasmoVoiceAddon addon = PlasmoVoiceAddon.getPlugin(PlasmoVoiceAddon.class);
-Optional<ISoundFormat> soundFormat = addon.getSoundFormatHolder().findFirstByPredicate(sound -> sound.isSupported(bufferedInputStream));
+Optional<ISoundFormat> soundFormat = addon.getSoundFormatHolder().findFirstByPredicate(sound->sound.isSupported(bufferedInputStream));
 ```
 3. Play `ISound` with `AudioSource`, `SoundController` (currently only PlayerAudioSource available)
+
 ```java
-import com.ubivashka.plasmovoice.PlasmoVoiceAddon;
+import com.bivashy.plasmovoice.PlasmoVoiceAddon;
 import org.bukkit.entity.Player;
-import com.ubivashka.plasmovoice.sound.ISound;
-import com.ubivashka.plasmovoice.audio.player.PlasmoVoiceSoundPlayer;
-import com.ubivashka.plasmovoice.audio.player.controller.IPlasmoVoiceSoundController;
+import com.bivashy.plasmovoice.sound.ISound;
+import com.bivashy.plasmovoice.audio.player.PlasmoVoiceSoundPlayer;
 
 if(!soundFormat.isPresent())
-    // handle unknown sound format
-PlasmoVoiceAddon addon = PlasmoVoiceAddon.getPlugin(PlasmoVoiceAddon.class);
-Player player = //Your player
-int soundDistance = 100; //Maximum distance that will be music played
+        // handle unknown sound format
+PlasmoVoiceAddon addon=PlasmoVoiceAddon.getPlugin(PlasmoVoiceAddon.class);
+Player player= //Your player
+int soundDistance=100; //Maximum distance that will be music played
 
-PlasmoVoiceSoundPlayer soundPlayer = addon.getPlasmoVoiceSoundPlayer(player.getUniqueId());
+PlasmoVoiceSoundPlayer soundPlayer=addon.getPlasmoVoiceSoundPlayer(player.getUniqueId());
 ISound sound = soundFormat.get().newSoundFactory().createSound(inputStream); // This line will automatically close InputStream, after you cannot use stream!
-IPlasmoVoiceSoundController soundController = IPlasmoVoiceSoundController.of(soundFormat.get(), soundDistance));
+IPlasmoVoiceSoundController soundController = IPlasmoVoiceSoundController.of(soundFormat.get(),soundDistance));
 soundPlayer.playSound(sound,soundController);
 ```
 **How to add custom sound format (For example Mp3)**
 1. Create implementation of `ISoundFormat`
+
 ```java            
-import com.ubivashka.plasmovoice.sound.ISoundFormat;
-import com.ubivashka.plasmovoice.config.settings.MusicPlayerSettings;
+import com.bivashy.plasmovoice.sound.ISoundFormat;
+import com.bivashy.plasmovoice.settings.config.MusicPlayerSettings;
 
 public class Mp3SoundFormat implements ISoundFormat {
-  
+
     @Override
     public boolean isSupported(InputStream audioStream) {
         //Check if audio is supported
     }
-  
+
     @Override
     public MusicPlayerSettings getSettings() {
-        return new MusicPlayerSettings(sleepDelay,volume,encoderBitrate,soundDistance,shouldUseCaching);
+        return new MusicPlayerSettings(sleepDelay, volume, encoderBitrate, soundDistance, shouldUseCaching);
     }
-  
+
     @Override
     public ISoundFactory newSoundFactory() {
         return new Mp3SoundFactory(this);
     }
+
 }
 ```
 2. Create implementation of `ISoundFactory`, that will convert your format into Opus audio format
+
 ```java
 import java.util.List;
 import java.util.ArrayList;
 import java.io.InputStream;
 
-import com.ubivashka.plasmovoice.sound.ISoundFactory;
-import com.ubivashka.plasmovoice.sound.ISoundFormat;
-import com.ubivashka.plasmovoice.sound.ISound;
-import com.ubivashka.plasmovoice.audio.codecs.OpusCodecHolder;
+import com.bivashy.plasmovoice.sound.ISoundFactory;
+import com.bivashy.plasmovoice.sound.ISoundFormat;
+import com.bivashy.plasmovoice.sound.ISound;
+import com.bivashy.plasmovoice.audio.codecs.OpusCodecHolder;
 
 public class Mp3SoundFactory implements ISoundFactory {
+
     protected final OpusCodecHolder opusCodecHolder = OpusCodecHolder.newCodecHolder();
     protected final ISoundFormat soundFormat;
 
     public Mp3SoundFactory(ISoundFormat soundFormat) {
         this.soundFormar = soundFormat;
     }
-  
+
     @Override
     public ISound createSound(InputStream audioStream) {
         byte[] yourSoundData = new byte[0];// Create sound data from audioStream, for example with library
         List<byte[]> splittedSoundData = // Split your byte[] opusCodecHolder.getFrameSize()
         List<byte[]> encodedSoundData = new ArrayList<>();
-        for(byte[] chunkData : splittedSoundData){
-          encodedSoundData.add(opusCodecHolder.encode(chunkData));
+        for (byte[] chunkData : splittedSoundData) {
+            encodedSoundData.add(opusCodecHolder.encode(chunkData));
         }
         audioStream.close(); // Close stream
         opusCodecHolder.closeEncoder(); // Close encoder, because it uses native library
         return ISound.of(encodedSoundData, soundFormat);
     }
+
 }   
 ```    
 3. Register your `ISoundFormat`
+
 ```java   
-import com.ubivashka.plasmovoice.PlasmoVoiceAddon;
+
 PlasmoVoiceAddon addon = PlasmoVoiceAddon.getPlugin(PlasmoVoiceAddon.class);
 addon.getSoundFormatHolder().add(new Mp3SoundFormat());
 ```
