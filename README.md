@@ -14,99 +14,131 @@
 ![Plugin logo](https://user-images.githubusercontent.com/85439143/150570814-1e3f3e00-7ec7-4972-a888-cfbb32b8ea6f.png)
 
 
-PlasmoVoiceAddon is a music player (Supports mp3 and wav) from url or local file. And provides API for developers for playing music.
+PlasmoVoiceAddon is a music player that supports both MP3 and WAV formats. It allows you to play music from URLs or local files and provides an API for developers to incorporate music playback functionality.
 
-> Important! This is plugin depends on plugin PlasmoVoice. And you cannot play music for the player that not downloaded mod PlasmoVoice
+> Important: This plugin depends on the PlasmoVoice plugin. You can only play music for players who have the PlasmoVoice mod downloaded.
 
-**How to install plugin**:
-   1. Download jar from spigot or github releases
-   2. Place in your spigot plugins folder
-   3. Launch server
+**Installation**:
+1. Download the JAR file from Spigot or GitHub releases.
+2. Place the JAR file in your Spigot _plugins_ folder.
+3. Launch server
 
-**Plugin commands**:
-   1. /musicfile [file name in PlasmoVoiceAddon folder (with extension)]
-   2. /musicurl [URL to sound]
+**Plugin Commands**:
+1. `/musicfile <file name>` - Play music from a file. The music file should be located in the PlasmoVoiceAddon folder
+2. `/musicurl <URL>` - Play music from a URL
 
-**Command examples**:
-   1. /musicfile piano2.wav - Will be played file piano2.wav file with format wav
-   2. /musicfile piano2.mp3 - Will be played file piano2.mp3 file with format mp3
-   3. /musicurl https://audio.jukehost.co.uk/L3HgZZAWd0GO38Ghw4xxreITjDk1krXL - Will be played sound from url with format mp3
+**Command Examples**:
+1. `/musicfile piano2.wav` - This command will play the piano2.wav file from the PlasmoVoiceAddon folder
+2. `/musicfile piano2.mp3` - This command will play the piano2.mp3 file from the PlasmoVoiceAddon folder
+3. `/musicurl https://audio.jukehost.co.uk/L3HgZZAWd0GO38Ghw4xxreITjDk1krXL` - This command will play music from the provided URL
 
 **Developer API**:
-  **How to play sound?**
-  1. First we need to get InputStream from our source:
-        
-    //  From file:
-    File file = //Your music file
-    InputStream inputStream = new BufferedInputStream(Files.newInputStream(file.toPath()));
-
-
-    // From URL:
-    URL url = //Your music url
-    InputStream inputStream = new BufferedInputStream(url.openStream());
-  2. We need to find ISoundFormat from InputStream using PlasmoVoiceAddon main class
-    
-    PlasmoVoiceAddon addon = PlasmoVoiceAddon.getPlugin(PlasmoVoiceAddon.class);
-    Optional<ISoundFormat> soundFormat = addon.getSoundFormatHolder().findFirstByPredicate(sound -> sound.isSupported(bufferedInputStream));
-
-  3. Play ISound with AudioSource and SoundController (currently only PlayerAudioSource available)
-
-    if(!soundFormat.isPresent())
-        // handle unknown sound format
-    PlasmoVoiceAddon addon = PlasmoVoiceAddon.getPlugin(PlasmoVoiceAddon.class);
-    Player player = //Your player
-    int soundDistance = 100; //Maximum distance that will be music played
-
-    PlasmoVoiceSoundPlayer soundPlayer = addon.getPlasmoVoiceSoundPlayer(player.getUniqueId());
-    ISound sound = soundFormat.get().newSoundFactory().createSound(inputStream); // This line will automatically close InputStream, after you cannot use stream!
-    IPlasmoVoiceSoundController soundController = IPlasmoVoiceSoundController.of(soundFormat.get(), soundDistance));
-    soundPlayer.playSound(sound,soundController);
-
-  **How to add custom ISoundFormat (For example Mp3)**
-  1. Create class that implements ISoundFormat
-            
-    public class Mp3SoundFormat implements ISoundFormat {
   
-      @Override
-      public boolean isSupported(InputStream audioStream) {
-          //Check if audio is supported
-      }
+**How to play sound?**
+1. Get `InputStream` from our source:
+```java    
+import java.io.File;
+import java.nio.file.Files;
+import java.net.URL;
+import java.io.InputStream;
+
+//  From file:
+File file = //Your music file
+InputStream inputStream = new BufferedInputStream(Files.newInputStream(file.toPath()));
+
+
+// From URL:
+URL url = //Your music url
+InputStream inputStream = new BufferedInputStream(url.openStream());
+```
+2. Find right `ISoundFormat` for `InputStream`
+```java
+import com.ubivashka.plasmovoice.PlasmoVoiceAddon;
+import com.ubivashka.plasmovoice.sound.ISoundFormat;
+import java.util.Optional;
+
+PlasmoVoiceAddon addon = PlasmoVoiceAddon.getPlugin(PlasmoVoiceAddon.class);
+Optional<ISoundFormat> soundFormat = addon.getSoundFormatHolder().findFirstByPredicate(sound -> sound.isSupported(bufferedInputStream));
+```
+3. Play `ISound` with `AudioSource`, `SoundController` (currently only PlayerAudioSource available)
+```java
+import com.ubivashka.plasmovoice.PlasmoVoiceAddon;
+import org.bukkit.entity.Player;
+import com.ubivashka.plasmovoice.sound.ISound;
+import com.ubivashka.plasmovoice.audio.player.PlasmoVoiceSoundPlayer;
+import com.ubivashka.plasmovoice.audio.player.controller.IPlasmoVoiceSoundController;
+
+if(!soundFormat.isPresent())
+    // handle unknown sound format
+PlasmoVoiceAddon addon = PlasmoVoiceAddon.getPlugin(PlasmoVoiceAddon.class);
+Player player = //Your player
+int soundDistance = 100; //Maximum distance that will be music played
+
+PlasmoVoiceSoundPlayer soundPlayer = addon.getPlasmoVoiceSoundPlayer(player.getUniqueId());
+ISound sound = soundFormat.get().newSoundFactory().createSound(inputStream); // This line will automatically close InputStream, after you cannot use stream!
+IPlasmoVoiceSoundController soundController = IPlasmoVoiceSoundController.of(soundFormat.get(), soundDistance));
+soundPlayer.playSound(sound,soundController);
+```
+**How to add custom sound format (For example Mp3)**
+1. Create implementation of `ISoundFormat`
+```java            
+import com.ubivashka.plasmovoice.sound.ISoundFormat;
+import com.ubivashka.plasmovoice.config.settings.MusicPlayerSettings;
+
+public class Mp3SoundFormat implements ISoundFormat {
   
-      @Override
-      public MusicPlayerSettings getSettings() {
-          return new MusicPlayerSettings(sleepDelay,volume,encoderBitrate,soundDistance,shouldUseCaching);
-      }
-  
-      @Override
-      public ISoundFactory newSoundFactory() {
-          return new Mp3SoundFactory(this);
-      }
+    @Override
+    public boolean isSupported(InputStream audioStream) {
+        //Check if audio is supported
     }
-  2. Create factory that provides pcm data list
-
-    public class Mp3SoundFactory implements ISoundFactory {
-      protected final OpusCodecHolder opusCodecHolder = OpusCodecHolder.newCodecHolder();
-      protected final ISoundFormat soundFormat;
-
-      public Mp3SoundFactory(ISoundFormat soundFormat) {
-          this.soundFormat = soundFormat;
-      }
   
-      @Override
-      public ISound createSound(InputStream audioStream) {
-          byte[] yourSoundData = // Create sound data from audioStream, for example with library
-          List<byte[]> splittedSoundData = // Split your byte[] opusCodecHolder.getFrameSize()
-          List<byte[]> encodedSoundData = new ArrayList<>();
-          for(byte[] chunkData : splittedSoundData){
-            encodedSoundData.add(opusCodecHolder.encode(chunkData));
-          }
-          audioStream.close(); // Close stream
-          opusCodecHolder.closeEncoder(); // Close encoder, because it uses native library
-          return ISound.of(encodedSoundData, soundFormat);
-      }
-    }   
-  3. Add ISoundFormat to the SoundFormatHolder
-   
-    PlasmoVoiceAddon addon = PlasmoVoiceAddon.getPlugin(PlasmoVoiceAddon.class);
-    addon.getSoundFormatHolder().add(new Mp3SoundFormat()); // Add ISoundFormat to the addon.
-  4. Congratulations! You are successfully added custom sound format! 
+    @Override
+    public MusicPlayerSettings getSettings() {
+        return new MusicPlayerSettings(sleepDelay,volume,encoderBitrate,soundDistance,shouldUseCaching);
+    }
+  
+    @Override
+    public ISoundFactory newSoundFactory() {
+        return new Mp3SoundFactory(this);
+    }
+}
+```
+2. Create implementation of `ISoundFactory`, that will convert your format into Opus audio format
+```java
+import java.util.List;
+import java.util.ArrayList;
+import java.io.InputStream;
+
+import com.ubivashka.plasmovoice.sound.ISoundFactory;
+import com.ubivashka.plasmovoice.sound.ISoundFormat;
+import com.ubivashka.plasmovoice.sound.ISound;
+import com.ubivashka.plasmovoice.audio.codecs.OpusCodecHolder;
+
+public class Mp3SoundFactory implements ISoundFactory {
+    protected final OpusCodecHolder opusCodecHolder = OpusCodecHolder.newCodecHolder();
+    protected final ISoundFormat soundFormat;
+
+    public Mp3SoundFactory(ISoundFormat soundFormat) {
+        this.soundFormar = soundFormat;
+    }
+  
+    @Override
+    public ISound createSound(InputStream audioStream) {
+        byte[] yourSoundData = new byte[0];// Create sound data from audioStream, for example with library
+        List<byte[]> splittedSoundData = // Split your byte[] opusCodecHolder.getFrameSize()
+        List<byte[]> encodedSoundData = new ArrayList<>();
+        for(byte[] chunkData : splittedSoundData){
+          encodedSoundData.add(opusCodecHolder.encode(chunkData));
+        }
+        audioStream.close(); // Close stream
+        opusCodecHolder.closeEncoder(); // Close encoder, because it uses native library
+        return ISound.of(encodedSoundData, soundFormat);
+    }
+}   
+```    
+3. Register your `ISoundFormat`
+```java   
+import com.ubivashka.plasmovoice.PlasmoVoiceAddon;
+PlasmoVoiceAddon addon = PlasmoVoiceAddon.getPlugin(PlasmoVoiceAddon.class);
+addon.getSoundFormatHolder().add(new Mp3SoundFormat());
+```
